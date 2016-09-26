@@ -8,7 +8,7 @@
 # para a listagem de codigos.
 
 # Para executar esse codigo basta fazer um copiar e colar no site
-# http://http://octave-online.net
+# http://octave-online.net
 
 # source('calculo_blindagem.m');
 
