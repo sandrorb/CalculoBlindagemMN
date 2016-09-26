@@ -10,6 +10,11 @@
 # Para executar esse codigo basta fazer um copiar e colar no site
 # http://octave-online.net
 
+# Esse programa encontra-se por tempo indeterminado em:
+# https://github.com/sandrorb/CalculoBlindagemMN
+# https://sandrorb.github.io/CalculoBlindagemMN
+# e pode ser retirado do ar a qualquer momento
+
 # source('calculo_blindagem.m');
 
 clc;
