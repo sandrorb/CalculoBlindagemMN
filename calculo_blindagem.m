@@ -1,5 +1,5 @@
 # Autor: Sandro Roger Boschetti
-#  Data: 25 de setembro de 2016
+#  Data: 28 de setembro de 2016
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
