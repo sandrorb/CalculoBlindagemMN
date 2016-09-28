@@ -72,6 +72,7 @@ AmCi = [30 30 5 5 10 50];
 A = AmCi .* 37;
 
 # Gamao em (microSv m^2) / (Mbq h)
+# G(1) = 0.00705 para o Tc-99m quando a fonte eh o paciente e 0.0141 caso contrario
 G = [0.0141 0.07647 0.07478 0.03004 0.02372 0.02440];
 
 # Camadas semirredutoras em cm para o Pb
@@ -115,9 +116,9 @@ doseLimite = 20;
 
 
 ####################### Calculo da Dose : Inicio ######################
-Rt = Tf .* (1 - e.^( -(log(2) ./ Tf) * t)) / (log(2) * t);
-Fu = e.^(- (log(2) ./ Tf) * tu);
-doseSemBlindagem = (G .* A .* N .* Rt .* Fu .* T * t) / d^2;
+#Rt = Tf .* (1 - e.^( -(log(2) ./ Tf) * t)) / (log(2) * t);
+#Fu = e.^(- (log(2) ./ Tf) * tu);
+#doseSemBlindagem = (G .* A .* N .* Rt .* Fu .* T * t) / d^2;
 #######################  Calculo da Dose : Fim   #######################
 
 
@@ -130,117 +131,307 @@ endfunction
 
 
 
-
-##########################################################################
-printf("Parede 1 - Fonte 1 - Ponto 1\n");
-%             G       A    N    t   tU    T           d              Tf
-%\calcDose{0.00705}{30*37}{60}{0.5}{1.5}{1/5}{5.9/2 + 0.15 + 0.30}{6.02}
-G = 0.00705; T = 1/5; d = 2.75; doseLimite = 20;
-doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf);
-[x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite);
-printf("A dose inicial de %.1f muSv pode ser blindada por:\n", sum(doseSemBlindagem));
-printf("%6.3f cm de Pb\n", x);
-printf("%6.3f cm de barita\n", y);
-printf("%6.3f cm de concreto\n\n", z);
-##########################################################################
-
-##########################################################################
-printf("Parede 2 - Fonte 1 - Ponto 2\n");
-%             G       A    N    t   tU    T                   d              Tf
-%\calcDose{0.00705}{30*37}{60}{0.5}{1.5}{1/5}{(3.55 - 0.15)/2 + 0.15 + 0.30}{6.02}
-G = 0.00705; T = 1/20; d = 1.65; doseLimite = 20;
-doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf);
-[x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite);
-printf("A dose inicial de %.1f muSv pode ser blindada por:\n", sum(doseSemBlindagem));
-printf("%6.3f cm de Pb\n", x);
-printf("%6.3f cm de barita\n", y);
-printf("%6.3f cm de concreto\n\n", z);
-##########################################################################
-
-##########################################################################
-printf("Parede 3 - Fonte 1 - Ponto 3\n");
-%             G       A    N    t   tU    T                   d              Tf
-%\calcDose{0.00705}{30*37}{60}{0.5}{1.5}{1/20}{2.98}{6.02}
-G = 0.00705; T = 1/5; d = 2.36; doseLimite = 100;
-doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf);
-[x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite);
-printf("A dose inicial de %.1f muSv pode ser blindada por:\n", sum(doseSemBlindagem));
-printf("%6.3f cm de Pb\n", x);
-printf("%6.3f cm de barita\n", y);
-printf("%6.3f cm de concreto\n\n", z);
-##########################################################################
+function calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite)
+	doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf);
+	[x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite);
+	printf("Dose: %.1f muSv (sem blindagem)\n", sum(doseSemBlindagem));
+	printf("Limite: %.1f muSv\n", doseLimite);
+	printf("Blindagem (cm de Pb, barita e concreto): %6.3f, %6.3f, %6.3f\n\n", x, y, z);
+endfunction
 
 
-
-
-
+printf("W significa Parede ou Porta. F, fonte e P, ponto de interesse.\n\n");
 
 
 ##########################################################################
-##########################################################################
-##########################################################################
-#                 O que vem abaixo sao meros testes                      #
-##########################################################################
-##########################################################################
-##########################################################################
+printf("Calculos a partir da Sala de Exame:\n\n");
 
-
-##########################################################################
-printf("\n\nCalculo igual ao que esta em LaTeX somente para Tc-99m\n");
-##########################################################################
-printf("Parede 1 - Fonte 1 - Ponto 1\n");
-A = [30 0 0 0 0 0] .* 37;
-N = [60 0 0 0 0 0];
-t = 0.5;
+# parametros fixos para a Sala de Exames
+G(1) = 0.00705;
+t = 1.5;
 tu = 1.5;
-T = 1/5;
-d = 5.9/2 + 0.15 + 0.30;
-Rt = Tf .* (1 - e.^( -(log(2) ./ Tf) * t)) / (log(2) * t);
-Fu = e.^(- (log(2) ./ Tf) * tu);
-doseSemBlindagem = (G .* A .* N .* Rt .* Fu .* T * t) / d^2;
 
-# Valores sendo usados pelo calculo em LaTeX
-mu(1,1) = log(2) / 0.03;
-mu(2,1) = log(2) / 1.3863;
-mu(3,1) = log(2) / 3.9;
+printf("W1, F1 e P1:\n");
+T = 1/5; d = 1.82; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-[x,y,z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite);
+printf("W2, F1 e P2: ");
+T = 1/5; d = 2.89; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("   Dose sem blindagem: %7.3f muSv\n", doseSemBlindagem(1));
-printf("      Espessura de Pb: %7.3f cm\n", x);
-printf("  Espessura de Barita: %7.3f cm\n", y);
-printf("Espessura de Concreto: %7.3f cm\n", z);
+printf("W3, F1 e P3: ");
+T = 1/5; d = 2.51; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Porta da Sala de Exames
+printf("W4, F1 e P4: ");
+T = 1/5; d = 3.78; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W5, F1 e P5: ");
+T = 1/5; d = 3.9; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W6, F1 e P6: ");
+T = 1/20; d = 3.23; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
 
 
 
-################################################################################
-printf("\n\nCalculo igual ao que esta em LaTeX somente para Tc-99m\n");
-################################################################################
-printf("Parede 8 - Fonte 2 - Ponto 8\n");
-A = [1000 0 0 0 0 0] .* 37;
-N = [1 0 0 0 0 0];
-t = 24;
+
+##########################################################################
+printf("Calculos a partir da Sala de Rejeitos (Atencao: Situacao Especial!!!):\n\n");
+
+# parametros fixos para a Sala de Rejeitos
+# apenas uma dose (N = 1)*5 de cada radionuclideo com atividade total da semana
+# por 24 horas por dia decaindo fora da blindagem.
+# Aproximacao: no caso dos radionuclideos exceto Tc-99m, ha um overlap de doses
+# semanais que nao eh considerado.
+
+G(1) = 0.0141;
+t = 24.0;
 tu = 0.0;
-T = 1/5;
-d = 2.19/2 + 0.15 + 0.3;
-Rt = Tf .* (1 - e.^( -(log(2) ./ Tf) * t)) / (log(2) * t);
-Fu = e.^(- (log(2) ./ Tf) * tu);
-doseSemBlindagem = (G .* A .* N .* Rt .* Fu .* T * t) / d^2;
+AmCi = [1000 50 10 10 10 50];
+A = AmCi .* 37;
+N = [1 1 1 1 1 1] * 5;
 
-# Valores sendo usados pelo calculo em LaTeX
-mu(1,1) = log(2) / 0.03;
-mu(2,1) = log(2) / 1.3863;
-mu(3,1) = log(2) / 3.9;
+printf("W7, F2 e P7: ");
+T = 1/5; d = 1.32; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+# doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf)
+
+printf("W8, F2 e P8: ");
+T = 1/5; d = 1.47; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W9, F2 e P9: ");
+T = 1/5; d = 1.44; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W10, F2 e P10: ");
+T = 1/5; d = 1.62; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("Como tambem o Tc-99m e os outros radionuclideos estarao todos blindados,\n");
+printf("baseado nos calculos acima, parece razoavel aplicacao de 2,5 cm de barita\n");
+printf("em ambos os lados da parede\n\n");
+
+printf("REVER TUDO ISSO POIS NAO ESTA BOM!!!!\n\n");
+##########################################################################
 
 
-[x,y,z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite);
 
-printf("   Dose sem blindagem: %7.3f muSv\n", doseSemBlindagem(1));
-printf("      Espessura de Pb: %7.3f cm\n", x);
-printf("  Espessura de Barita: %7.3f cm\n", y);
-printf("Espessura de Concreto: %7.3f cm\n", z);
-################################################################################
+##########################################################################
+printf("Calculos a partir do Laboratorio:\n\n");
+
+# suposicao que a maiorr dose usual de marcacao com Tc-99m (300 mCi) e as 
+# doses usais de administracao aos pacientes dos outros radionuclideos 
+# ficam expostas por um tempo aproximado de 2h por dia.
+
+G(1) = 0.0141;
+t = 2.0;
+tu = 0.0;
+AmCi = [300 30 5 5 10 50];
+A = AmCi .* 37;
+N = [1 1 1 1 1 1] * 5;
+
+printf("W11, F3 e P11: ");
+T = 1/5; d = 2.6; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W12, F3 e P12: ");
+printf("ATENCAO: Na duvida sobre qual T usar\n");
+T = 1; d = 2.09; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W13, F3 e P13: ");
+T = 1/5; d = 1.89; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W14, F3 e P14: ");
+T = 1/20; d = 2.13; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W15, F3 e P15: ");
+T = 1/5; d = 1.89; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W16, F3 e P16: ");
+T = 1/5; d = 1.73; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+##########################################################################
+
+
+
+##########################################################################
+printf("Calculos a partir da Sala de administracao de Radiofarmacos:\n\n");
+
+# com relacao as consideracoes anteriores, aqui a dose de Tc-99m exposta
+# e considerada de 30 mCi
+
+printf("ATENCAO: Verificar se o tempo de exposicao (t)!!!\n");
+G(1) = 0.0141;
+t = 0.5;
+tu = 0.0;
+AmCi = [30 30 5 5 10 50];
+A = AmCi .* 37;
+N = [1 1 1 1 1 1] * 5;
+
+printf("W17, F4 e P17: ");
+printf("ATENCAO: Na duvida sobre qual T usar\n");
+T = 1/20; d = 1.78; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W18, F4 e P18: ");
+T = 1/20; d = 1.92; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W19, F4 e P19: ");
+printf("ATENCAO: Na duvida sobre qual T usar\n");
+T = 1; d = 1.77; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W20, F4 e P20: ");
+T = 1/5; d = 1.91; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W21, F4 e P21: ");
+T = 1/5; d = 1.43; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+##########################################################################
+
+
+##########################################################################
+printf("Calculos a partir da Sala de Espera de Pacientes Injetados:\n\n");
+
+G(1) = 0.00705;
+t = 0.5;
+tu = 0.0;
+AmCi = [30 30 5 5 10 50];
+A = AmCi .* 37;
+N = [60 10 5 4 2 1];
+
+printf("W22, F5 e P22: ");
+T = 1/20; d = 2.96; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W23, F5 e P23: ");
+T = 1/20; d = 2.78; doseLimite = 20/2;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W24, F5 e P24: ");
+printf("ATENCAO: Na duvida sobre qual T usar\n");
+printf("ATENCAO: PAREDE CRITICA!!!\n");
+T = 1; d = 1.11; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W25, F5 e P25: ");
+T = 1/20; d = 3.28; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W26, F5 e P26: ");
+T = 1/5; d = 4.5; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W27, F5 e P27: ");
+T = 1/5; d = 3.0; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W28, F5 e P28: ");
+T = 1/5; d = 2.23; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+##########################################################################
+
+
+
+##########################################################################
+printf("Calculos a partir do Sanitario Exclusivo de Pacientes Injetados:\n\n");
+
+# paciente fica em media 10 minutos no sanitario
+
+G(1) = 0.00705;
+t = 10/60;
+tu = 0.0;
+AmCi = [30 30 5 5 10 50];
+A = AmCi .* 37;
+N = [60 10 5 4 2 1];
+
+printf("W29, F6 e P29: ");
+T = 1/5; d = 1.16; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W30, F6 e P30: ");
+T = 1; d = 1.82; doseLimite = 20/2;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W31, F6 e P23: ");
+T = 1/20; d = 1.85; doseLimite = 20/2;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W32, F6 e P31: ");
+T = 1/20; d = 1.26; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W33, F6 e P32: ");
+T = 1/5; d = 1.55; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+##########################################################################
+
+
+##########################################################################
+printf("Calculos a partir da Ergometria:\n\n");
+
+G(1) = 0.00705;
+t = 0.5;
+tu = 0.0;
+AmCi = [30 30 5 5 10 50];
+A = AmCi .* 37;
+N = [60 10 5 4 2 1];
+
+printf("W34, F7 e P33: ");
+T = 1/20; d = 2.0; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W35, F7 e P34: ");
+T = 1/20; d = 2.41; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W36, F7 e P35: ");
+T = 1; d = 1.55; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W37, F7 e P30: ");
+T = 1; d = 2.57; doseLimite = 20/2;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W38, F7 e P36: ");
+T = 1/20; d = 3.15; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W39, F7 e P37: ");
+T = 1/5; d = 1.59; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("W40, F7 e P38: ");
+T = 1/20; d = 2.12; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+##########################################################################
+
+
+##########################################################################
+# printf("Parede 1 - Fonte 1 - Ponto 1\n");
+# %             G       A    N    t   tU    T           d              Tf
+# %\calcDose{0.00705}{30*37}{60}{0.5}{1.5}{1/5}{5.9/2 + 0.15 + 0.30}{6.02}
+# # isso aqui esta errado. G eh matriz e nao um escalar
+# G = 0.00705; T = 1/5; d = 2.75; doseLimite = 20;
+# doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf);
+# [x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite);
+# printf("A dose inicial de %.1f muSv pode ser blindada por:\n", sum(doseSemBlindagem));
+# printf("%6.3f cm de Pb\n", x);
+# printf("%6.3f cm de barita\n", y);
+# printf("%6.3f cm de concreto\n\n", z);
+##########################################################################
 
 
 
