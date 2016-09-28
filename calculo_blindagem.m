@@ -419,20 +419,6 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
 
 
-##########################################################################
-# printf("Parede 1 - Fonte 1 - Ponto 1\n");
-# %             G       A    N    t   tU    T           d              Tf
-# %\calcDose{0.00705}{30*37}{60}{0.5}{1.5}{1/5}{5.9/2 + 0.15 + 0.30}{6.02}
-# # isso aqui esta errado. G eh matriz e nao um escalar
-# G = 0.00705; T = 1/5; d = 2.75; doseLimite = 20;
-# doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf);
-# [x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite);
-# printf("A dose inicial de %.1f muSv pode ser blindada por:\n", sum(doseSemBlindagem));
-# printf("%6.3f cm de Pb\n", x);
-# printf("%6.3f cm de barita\n", y);
-# printf("%6.3f cm de concreto\n\n", z);
-##########################################################################
-
 
 
 
