@@ -1,5 +1,5 @@
 # Autor: Sandro Roger Boschetti
-#  Data: 28 de setembro de 2016
+#  Data: 04 de outubro de 2016
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -7,8 +7,8 @@
 # encodificacao UTF-8, como o pacote listings do LaTeX utilizado
 # para a listagem de codigos.
 
-# Para executar esse codigo basta fazer um copiar e colar no site
-# http://octave-online.net
+# Para executar esse codigo basta fazer um copiar e colar do conteudo
+# desse arquivo para o sitehttp://octave-online.net
 
 # Esse programa encontra-se por tempo indeterminado em:
 # https://github.com/sandrorb/CalculoBlindagemMN
@@ -19,43 +19,7 @@
 
 clc;
 
-##########################################################################
-function [x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite)
-
-	delta = 0.001;
-	
-	x = 0.0;
-	doseComBlindagem = doseSemBlindagem .* exp (- mu(1,:) * x);
-	doseInicial = sum(doseComBlindagem);
-	
-	while (sum(doseComBlindagem) > doseLimite) 
-		x = x + delta;
-		doseComBlindagem = doseSemBlindagem .* exp (- mu(1,:) * x);
-	endwhile
-
-	y = 0.0;
-	doseComBlindagem = doseSemBlindagem .* exp (- mu(2,:) * y);
-	doseInicial = sum(doseComBlindagem);
-
-	while (sum(doseComBlindagem) > doseLimite) 
-		y = y + delta;
-		doseComBlindagem = doseSemBlindagem .* exp (- mu(2,:) * y);
-	endwhile
-
-	z = 0.0;
-	doseComBlindagem = doseSemBlindagem .* exp (- mu(3,:) * z);
-	doseInicial = sum(doseComBlindagem);
-
-	while (sum(doseComBlindagem) > doseLimite) 
-		z = z + delta;
-		doseComBlindagem = doseSemBlindagem .* exp (- mu(3,:) * z);
-	endwhile
-
-endfunction
-##########################################################################
-
-
-################### Definicoes : Inicio ###################
+########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
 
 # Meias-vidas fisicas
@@ -94,43 +58,56 @@ csr = [ csrPb; csrBarita; csrConcreto];
 
 # Coeficiente de atenuacao linear em 1/cm
 mu = log(2) ./ csr;
-
-
-# Tempo em horas que cada paciente passa no recinto
-t = 0.5;
-
-# Tempo em horas de "uptake"
-tu = 1.5;
-
-
-############ Definicoes Relativas ao Ponto de Interesse ############
-# Fator de ocupacao T
-T = 1.0;
-
-# Distancia em metros da fonte ao ponto de interesse a ser blindado.
-d = 2.0;
-
-# Dose Limite em microSv por semana
-doseLimite = 20;
-################### Definicoes : Fim ###################
-
-
-####################### Calculo da Dose : Inicio ######################
-#Rt = Tf .* (1 - e.^( -(log(2) ./ Tf) * t)) / (log(2) * t);
-#Fu = e.^(- (log(2) ./ Tf) * tu);
-#doseSemBlindagem = (G .* A .* N .* Rt .* Fu .* T * t) / d^2;
-#######################  Calculo da Dose : Fim   #######################
+########################### Definicoes : Fim ###########################
 
 
 
+##########################################################################
+function [x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite)
+
+	delta = 0.001;
+	
+	x = 0.0;
+	doseComBlindagem = doseSemBlindagem .* exp (- mu(1,:) * x);
+	doseInicial = sum(doseComBlindagem);
+	
+	while (sum(doseComBlindagem) > doseLimite) 
+		x = x + delta;
+		doseComBlindagem = doseSemBlindagem .* exp (- mu(1,:) * x);
+	endwhile
+
+	y = 0.0;
+	doseComBlindagem = doseSemBlindagem .* exp (- mu(2,:) * y);
+	doseInicial = sum(doseComBlindagem);
+
+	while (sum(doseComBlindagem) > doseLimite) 
+		y = y + delta;
+		doseComBlindagem = doseSemBlindagem .* exp (- mu(2,:) * y);
+	endwhile
+
+	z = 0.0;
+	doseComBlindagem = doseSemBlindagem .* exp (- mu(3,:) * z);
+	doseInicial = sum(doseComBlindagem);
+
+	while (sum(doseComBlindagem) > doseLimite) 
+		z = z + delta;
+		doseComBlindagem = doseSemBlindagem .* exp (- mu(3,:) * z);
+	endwhile
+
+endfunction
+##########################################################################
+
+
+##########################################################################
 function doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf)
 	Rt = Tf .* (1 - e.^( -(log(2) ./ Tf) * t)) / (log(2) * t);
 	Fu = e.^(- (log(2) ./ Tf) * tu);
 	doseSemBlindagem = (G .* A .* N .* Rt .* Fu .* T * t) / d^2;
 endfunction
+##########################################################################
 
 
-
+##########################################################################
 function calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite)
 	doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf);
 	[x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite);
@@ -138,13 +115,16 @@ function calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite)
 	printf("Limite: %.1f muSv\n", doseLimite);
 	printf("Blindagem (cm de Pb, barita e concreto): %6.3f, %6.3f, %6.3f\n\n", x, y, z);
 endfunction
+##########################################################################
+
+
 
 
 printf("W significa Parede ou Porta. F, fonte e P, ponto de interesse.\n\n");
 
 
 ##########################################################################
-printf("Calculos a partir da Sala de Exame:\n\n");
+printf("Sala de Exame:\n\n");
 
 # parametros fixos para a Sala de Exames
 G(1) = 0.00705;
@@ -181,7 +161,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 
 ##########################################################################
-printf("Calculos a partir da Sala de Rejeitos (Atencao: Situacao Especial!!!):\n\n");
+printf("Sala de Rejeitos (Atencao: Situacao Especial!!!):\n\n");
 
 # parametros fixos para a Sala de Rejeitos
 # apenas uma dose (N = 1)*5 de cada radionuclideo com atividade total da semana
@@ -223,7 +203,7 @@ printf("REVER TUDO ISSO POIS NAO ESTA BOM!!!!\n\n");
 
 
 ##########################################################################
-printf("Calculos a partir do Laboratorio:\n\n");
+printf("Laboratorio de Manipulacao e Armazenamento de Fontes em Uso:\n\n");
 
 # suposicao que a maiorr dose usual de marcacao com Tc-99m (300 mCi) e as 
 # doses usais de administracao aos pacientes dos outros radionuclideos 
@@ -265,7 +245,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 
 ##########################################################################
-printf("Calculos a partir da Sala de administracao de Radiofarmacos:\n\n");
+printf("Sala de Administracao de Radiofarmacos:\n\n");
 
 # com relacao as consideracoes anteriores, aqui a dose de Tc-99m exposta
 # e considerada de 30 mCi
@@ -303,7 +283,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 
 ##########################################################################
-printf("Calculos a partir da Sala de Espera de Pacientes Injetados:\n\n");
+printf("Sala de Espera de Pacientes Injetados:\n\n");
 
 G(1) = 0.00705;
 t = 0.5;
@@ -346,7 +326,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 
 ##########################################################################
-printf("Calculos a partir do Sanitario Exclusivo de Pacientes Injetados:\n\n");
+printf("Sanitario Exclusivo de Pacientes Injetados:\n\n");
 
 # paciente fica em media 10 minutos no sanitario
 
@@ -380,7 +360,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 
 ##########################################################################
-printf("Calculos a partir da Ergometria:\n\n");
+printf("Ergometria:\n\n");
 
 G(1) = 0.00705;
 t = 0.5;
