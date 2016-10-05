@@ -1,5 +1,5 @@
 # Autor: Sandro Roger Boschetti
-#  Data: 04 de outubro de 2016
+#  Data: 05 de outubro de 2016
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -111,9 +111,17 @@ endfunction
 function calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite)
 	doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf);
 	[x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite);
-	printf("Dose: %.1f muSv (sem blindagem)\n", sum(doseSemBlindagem));
-	printf("Limite: %.1f muSv\n", doseLimite);
+# 	if ((x > 0.3) || (y > 2.5) || (z > 5.0))
+# 		printf("\n##########################################################################\n");
+# 	endif	
+	printf("Dose: %.1f muSv | ", sum(doseSemBlindagem));
+	printf("Limite: %.1f muSv | ", doseLimite);
+	printf("Distancia: %.1f m\n", d);
+	# printf("Blindagem (cm de Pb, barita e concreto): %6.3f, %6.3f, %6.3f\n\n", x, y, z);
 	printf("Blindagem (cm de Pb, barita e concreto): %6.3f, %6.3f, %6.3f\n\n", x, y, z);
+# 	if ((x > 0.3) || (y > 2.5) || (z > 5.0))
+# 		printf("##########################################################################\n\n");
+# 	endif
 endfunction
 ##########################################################################
 
@@ -128,31 +136,31 @@ printf("Sala de Exame:\n\n");
 
 # parametros fixos para a Sala de Exames
 G(1) = 0.00705;
-t = 1.5;
+t = 0.5;
 tu = 1.5;
 
-printf("W1, F1 e P1:\n");
+printf("W1, F1 e P1: \n");
 T = 1/5; d = 1.82; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W2, F1 e P2: ");
+printf("W2, F1 e P2: \n");
 T = 1/5; d = 2.89; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W3, F1 e P3: ");
+printf("W3, F1 e P3: \n");
 T = 1/5; d = 2.51; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Porta da Sala de Exames
-printf("W4, F1 e P4: ");
+printf("W4, F1 e P4: \n");
 T = 1/5; d = 3.78; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W5, F1 e P5: ");
+printf("W5, F1 e P5: \n");
 T = 1/5; d = 3.9; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W6, F1 e P6: ");
+printf("W6, F1 e P6: \n");
 T = 1/20; d = 3.23; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
@@ -172,24 +180,33 @@ printf("Sala de Rejeitos (Atencao: Situacao Especial!!!):\n\n");
 G(1) = 0.0141;
 t = 24.0;
 tu = 0.0;
-AmCi = [1000 50 10 10 10 50];
+# AmCi = [1000 50 10 10 10 50];
+# Supondo que o I-131 seja muito bem blindado, entao admite-se a atividade
+# dele como sendo 0 mCi
+printf("Admitindo que o I-131 seja totalmente blindado (atividade 0)\n");
+printf("Na verdade, todos os  radio nuclideos sao blindados dentro da sala\n");
+printf("Mesmo assim, adimite-se, conservadoramente, que os demais radionuclideos\n");
+printf("nao sao blindados e que toda atividade nao eh usada e guardada na sala.\n");
+AmCi = [1000 0 10 10 10 50];
 A = AmCi .* 37;
 N = [1 1 1 1 1 1] * 5;
+# Supondo que aproximadamente metade da atividade eh blindada 
+# N = [1 1 1 1 1 1] * 2.5;
 
-printf("W7, F2 e P7: ");
+printf("W7, F2 e P7: \n");
 T = 1/5; d = 1.32; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 # doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf)
 
-printf("W8, F2 e P8: ");
+printf("W8, F2 e P8: \n");
 T = 1/5; d = 1.47; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W9, F2 e P9: ");
+printf("W9, F2 e P9: \n");
 T = 1/5; d = 1.44; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W10, F2 e P10: ");
+printf("W10, F2 e P10: \n");
 T = 1/5; d = 1.62; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
@@ -216,28 +233,28 @@ AmCi = [300 30 5 5 10 50];
 A = AmCi .* 37;
 N = [1 1 1 1 1 1] * 5;
 
-printf("W11, F3 e P11: ");
+printf("W11, F3 e P11: \n");
 T = 1/5; d = 2.6; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W12, F3 e P12: ");
+printf("W12, F3 e P12: \n");
 printf("ATENCAO: Na duvida sobre qual T usar\n");
 T = 1; d = 2.09; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W13, F3 e P13: ");
+printf("W13, F3 e P13: \n");
 T = 1/5; d = 1.89; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W14, F3 e P14: ");
+printf("W14, F3 e P14: \n");
 T = 1/20; d = 2.13; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W15, F3 e P15: ");
+printf("W15, F3 e P15: \n");
 T = 1/5; d = 1.89; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W16, F3 e P16: ");
+printf("W16, F3 e P16: \n");
 T = 1/5; d = 1.73; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
@@ -258,25 +275,25 @@ AmCi = [30 30 5 5 10 50];
 A = AmCi .* 37;
 N = [1 1 1 1 1 1] * 5;
 
-printf("W17, F4 e P17: ");
+printf("W17, F4 e P17: \n");
 printf("ATENCAO: Na duvida sobre qual T usar\n");
 T = 1/20; d = 1.78; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W18, F4 e P18: ");
+printf("W18, F4 e P18: \n");
 T = 1/20; d = 1.92; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W19, F4 e P19: ");
+printf("W19, F4 e P19: \n");
 printf("ATENCAO: Na duvida sobre qual T usar\n");
 T = 1; d = 1.77; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W20, F4 e P20: ");
+printf("W20, F4 e P20: \n");
 T = 1/5; d = 1.91; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W21, F4 e P21: ");
+printf("W21, F4 e P21: \n");
 T = 1/5; d = 1.43; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
@@ -292,33 +309,33 @@ AmCi = [30 30 5 5 10 50];
 A = AmCi .* 37;
 N = [60 10 5 4 2 1];
 
-printf("W22, F5 e P22: ");
+printf("W22, F5 e P22: \n");
 T = 1/20; d = 2.96; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W23, F5 e P23: ");
+printf("W23, F5 e P23: \n");
 T = 1/20; d = 2.78; doseLimite = 20/2;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W24, F5 e P24: ");
+printf("W24, F5 e P24: \n");
 printf("ATENCAO: Na duvida sobre qual T usar\n");
 printf("ATENCAO: PAREDE CRITICA!!!\n");
 T = 1; d = 1.11; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W25, F5 e P25: ");
+printf("W25, F5 e P25: \n");
 T = 1/20; d = 3.28; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W26, F5 e P26: ");
+printf("W26, F5 e P26: \n");
 T = 1/5; d = 4.5; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W27, F5 e P27: ");
+printf("W27, F5 e P27: \n");
 T = 1/5; d = 3.0; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W28, F5 e P28: ");
+printf("W28, F5 e P28: \n");
 T = 1/5; d = 2.23; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
@@ -337,23 +354,23 @@ AmCi = [30 30 5 5 10 50];
 A = AmCi .* 37;
 N = [60 10 5 4 2 1];
 
-printf("W29, F6 e P29: ");
+printf("W29, F6 e P29: \n");
 T = 1/5; d = 1.16; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W30, F6 e P30: ");
+printf("W30, F6 e P30: \n");
 T = 1; d = 1.82; doseLimite = 20/2;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W31, F6 e P23: ");
+printf("W31, F6 e P23: \n");
 T = 1/20; d = 1.85; doseLimite = 20/2;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W32, F6 e P31: ");
+printf("W32, F6 e P31: \n");
 T = 1/20; d = 1.26; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W33, F6 e P32: ");
+printf("W33, F6 e P32: \n");
 T = 1/5; d = 1.55; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
@@ -369,34 +386,50 @@ AmCi = [30 30 5 5 10 50];
 A = AmCi .* 37;
 N = [60 10 5 4 2 1];
 
-printf("W34, F7 e P33: ");
+printf("W34, F7 e P33: \n");
 T = 1/20; d = 2.0; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W35, F7 e P34: ");
+printf("W35, F7 e P34: \n");
 T = 1/20; d = 2.41; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W36, F7 e P35: ");
+printf("W36, F7 e P35: \n");
 T = 1; d = 1.55; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W37, F7 e P30: ");
+printf("W37, F7 e P30: \n");
 T = 1; d = 2.57; doseLimite = 20/2;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W38, F7 e P36: ");
+printf("W38, F7 e P36: \n");
 T = 1/20; d = 3.15; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W39, F7 e P37: ");
+printf("W39, F7 e P37: \n");
 T = 1/5; d = 1.59; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("W40, F7 e P38: ");
+printf("W40, F7 e P38: \n");
 T = 1/20; d = 2.12; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
+
+
+
+##########################################################################
+printf("Sala Acima da Sala de Exames: \n\n");
+# parametros fixos para a Sala de Exames
+G(1) = 0.00705;
+t = 0.5;
+tu = 1.5;
+
+printf("W41, F1 e P39:\n");
+peDireito = 3.0;
+T = 1; d = peDireito - 1.5 + 1.5; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+##########################################################################
+
 
 
 
