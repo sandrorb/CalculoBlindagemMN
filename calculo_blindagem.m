@@ -1,5 +1,7 @@
 # Autor: Sandro Roger Boschetti
-#  Data: 05 de outubro de 2016
+#  Data: 09 de outubro de 2016 as 11h14min
+
+printf("Calculos realizados em 09 de outubro de 2016 as 11h14min\n\n");
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -169,7 +171,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 
 ##########################################################################
-printf("Sala de Rejeitos (Atencao: Situacao Especial!!!):\n\n");
+printf("Sala de Rejeitos:\n\n");
 
 # parametros fixos para a Sala de Rejeitos
 # apenas uma dose (N = 1)*5 de cada radionuclideo com atividade total da semana
@@ -184,8 +186,8 @@ tu = 0.0;
 # Supondo que o I-131 seja muito bem blindado, entao admite-se a atividade
 # dele como sendo 0 mCi
 printf("Admitindo que o I-131 seja totalmente blindado (atividade 0)\n");
-printf("Na verdade, todos os  radio nuclideos sao blindados dentro da sala\n");
-printf("Mesmo assim, adimite-se, conservadoramente, que os demais radionuclideos\n");
+printf("Na verdade, todos os  radionuclideos sao blindados dentro da sala\n");
+printf("Mesmo assim, admite-se, conservadoramente, que os demais radionuclideos\n");
 printf("nao sao blindados e que toda atividade nao eh usada e guardada na sala.\n");
 AmCi = [1000 0 10 10 10 50];
 A = AmCi .* 37;
@@ -209,12 +211,6 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 printf("W10, F2 e P10: \n");
 T = 1/5; d = 1.62; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("Como tambem o Tc-99m e os outros radionuclideos estarao todos blindados,\n");
-printf("baseado nos calculos acima, parece razoavel aplicacao de 2,5 cm de barita\n");
-printf("em ambos os lados da parede\n\n");
-
-printf("REVER TUDO ISSO POIS NAO ESTA BOM!!!!\n\n");
 ##########################################################################
 
 
@@ -222,14 +218,15 @@ printf("REVER TUDO ISSO POIS NAO ESTA BOM!!!!\n\n");
 ##########################################################################
 printf("Laboratorio de Manipulacao e Armazenamento de Fontes em Uso:\n\n");
 
-# suposicao que a maiorr dose usual de marcacao com Tc-99m (300 mCi) e as 
-# doses usais de administracao aos pacientes dos outros radionuclideos 
-# ficam expostas por um tempo aproximado de 2h por dia.
+# Suposicao de que algum radionuclideo fica exposto sem blindagem por 2 h / dia
+# Suposicao que cada um dos radionuclideos fica exposto um periodo igual nessas 2 h
+# Suposicao de que toda atividade recebida fica exposta
 
 G(1) = 0.0141;
-t = 2.0;
+t = 2.0  / numel(AmCi);
 tu = 0.0;
-AmCi = [300 30 5 5 10 50];
+#AmCi = [300 30 5 5 10 50];
+AmCi = [1000 50 10 10 10 50];
 A = AmCi .* 37;
 N = [1 1 1 1 1 1] * 5;
 
@@ -264,12 +261,11 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
 printf("Sala de Administracao de Radiofarmacos:\n\n");
 
-# com relacao as consideracoes anteriores, aqui a dose de Tc-99m exposta
-# e considerada de 30 mCi
+# Suposicao de que cada radionuclideo autorizado fica exposto por um
+# periodo de 10 minutos em sua atividade tipica de "injecao".
 
-printf("ATENCAO: Verificar se o tempo de exposicao (t)!!!\n");
 G(1) = 0.0141;
-t = 0.5;
+t = 10 / 60;
 tu = 0.0;
 AmCi = [30 30 5 5 10 50];
 A = AmCi .* 37;
@@ -302,8 +298,15 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
 printf("Sala de Espera de Pacientes Injetados:\n\n");
 
+printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+printf("Rever o tempo de espera de cada paciente. Acho que nao eh 1/2 h e sim 1,5h.\n");
+printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+
+
 G(1) = 0.00705;
-t = 0.5;
+t = 1.5;
 tu = 0.0;
 AmCi = [30 30 5 5 10 50];
 A = AmCi .* 37;
@@ -379,10 +382,14 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
 printf("Ergometria:\n\n");
 
+# Consideracao de que apenas fontes de Tc-99m com dose tipica de 30 mCi
+# ficam expostas por um periodo aproximado do procedimento de 30 minutos
+
 G(1) = 0.00705;
-t = 0.5;
+t = 30 / 60;
 tu = 0.0;
-AmCi = [30 30 5 5 10 50];
+#AmCi = [30 30 5 5 10 50];
+AmCi = [30 0 0 0 0 0];
 A = AmCi .* 37;
 N = [60 10 5 4 2 1];
 
