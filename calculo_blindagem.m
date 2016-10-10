@@ -1,5 +1,5 @@
 # Autor: Sandro Roger Boschetti
-#  Data: 10 de outubro de 2016 as 16h16min
+#  Data: 10 de outubro de 2016 as 17h13min
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -24,7 +24,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Calculos realizados em 10 de outubro de 2016 as 16h16min\n\n");
+printf("Calculos realizados em 10 de outubro de 2016 as 17h13min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -133,7 +133,7 @@ function calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite)
 	printf("Blindagem (cm de Pb, barita e concreto): %6.3f, %6.3f, %6.3f\n\n", x, y, z);
 	
 	aux = wfp;
-	wfp = [wfp sum(doseSemBlindagem) doseLimite x y z];
+	wfp = [wfp doseLimite sum(doseSemBlindagem) x y z];
  	dadosParaImpressao = vertcat(dadosParaImpressao, wfp);
  	wfp = aux;
 	
@@ -473,17 +473,22 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
 
 
-# Esta parte do programa esta em testes e eh para propiciar uma tabela concisa
-# para levar os dados ao documento
 
-# [wfp doseSemBlindagem doseLimite x y z];
-printf(" W   F   P     Dose      Limite        Pb      Barita    Concreto\n");
+# Saida de dados para tabela LaTeX
+# Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
+
+fid = fopen("tabela_dados.tex", "w");
+fprintf(fid, " \\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
+fprintf(fid, "\\textbf{Limite} & \\textbf{Dose} & \\textbf{Pb} & ");
+fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto}  \\\\ \\hline \n");
 for i = 1:rows(dadosParaImpressao)
-	printf("%3d %3d ", dadosParaImpressao(i,1), dadosParaImpressao(i,2));
-	printf("%3d %10.2f ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
-	printf("%10.2f %10.2f ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
-	printf("%10.2f %10.2f\n", dadosParaImpressao(i,7), dadosParaImpressao(i,8));
+	fprintf(fid, "%3d & %3d & ", dadosParaImpressao(i,1), dadosParaImpressao(i,2));
+	fprintf(fid, "%3d & %10.2f & ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
+	fprintf(fid, "%10.2f & %10.2f & ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
+	fprintf(fid, "%10.2f & ", dadosParaImpressao(i,7));
+	fprintf(fid, "%10.2f \\\\ \\hline \n", dadosParaImpressao(i,8));
 endfor
+fclose(fid);
 
 printf("\n");
 
