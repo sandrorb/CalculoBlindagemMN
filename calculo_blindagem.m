@@ -478,8 +478,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 # Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
 
 fid = fopen("tabela_dados.tex", "w");
-fprintf(fid, "\\hline \\\\ \n");
-fprintf(fid, " \\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
+fprintf(fid, "\\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
 fprintf(fid, "\\textbf{Limite} & \\textbf{Dose} & \\textbf{Pb} & ");
 fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto}  \\\\ \\hline \n");
 for i = 1:rows(dadosParaImpressao)
@@ -487,7 +486,7 @@ for i = 1:rows(dadosParaImpressao)
 	fprintf(fid, "%3d & %10.2f & ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
 	fprintf(fid, "%10.2f & %10.2f & ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
 	fprintf(fid, "%10.2f & ", dadosParaImpressao(i,7));
-	fprintf(fid, "%10.2f \\\\ \\hline \n", dadosParaImpressao(i,8));
+	fprintf(fid, "%10.2f \\\\ \n", dadosParaImpressao(i,8));
 endfor
 fclose(fid);
 
