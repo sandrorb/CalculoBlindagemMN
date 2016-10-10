@@ -478,6 +478,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 # Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
 
 fid = fopen("tabela_dados.tex", "w");
+fprintf(fid, "\\hline \\\\ \n");
 fprintf(fid, " \\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
 fprintf(fid, "\\textbf{Limite} & \\textbf{Dose} & \\textbf{Pb} & ");
 fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto}  \\\\ \\hline \n");
