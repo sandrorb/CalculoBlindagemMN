@@ -1,5 +1,5 @@
 # Autor: Sandro Roger Boschetti
-#  Data: 10 de outubro de 2016 as 13h59min
+#  Data: 10 de outubro de 2016 as 16h16min
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -24,7 +24,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Calculos realizados em 10 de outubro de 2016 as 12h51min\n\n");
+printf("Calculos realizados em 10 de outubro de 2016 as 16h16min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -133,7 +133,7 @@ function calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite)
 	printf("Blindagem (cm de Pb, barita e concreto): %6.3f, %6.3f, %6.3f\n\n", x, y, z);
 	
 	aux = wfp;
-	wfp = [wfp doseSemBlindagem doseLimite x y z];
+	wfp = [wfp sum(doseSemBlindagem) doseLimite x y z];
  	dadosParaImpressao = vertcat(dadosParaImpressao, wfp);
  	wfp = aux;
 	
@@ -201,14 +201,18 @@ printf("Sala de Rejeitos:\n\n");
 # o Gamao do Tc-99m volta ao normal ja que nao ha auto blindagem
 G(1) = 0.0141;
 
-# Supondo que o I-131 seja muito bem blindado, entao admite-se a atividade
-# dele como sendo 0 mCi. Os demais, admite-se, conservadoramente, que nao ha 
-# blindagem e que toda atividade semanal e rejeitada
-printf("Admitindo que o I-131 seja totalmente blindado (atividade 0)\n");
-printf("Na verdade, todos os  radionuclideos sao blindados dentro da sala\n");
-printf("Mesmo assim, admite-se, conservadoramente, que os demais radionuclideos\n");
-printf("nao sao blindados e que toda atividade nao eh usada e guardada na sala.\n\n");
-A = AsemanalBq;
+printf("Suposicao que somente 10%% no material adquiro semanalmente vai para o rejeito\n");
+
+# atividade no rejeito eh 10%
+A = AsemanalBq .* 0.1;
+
+# printf("Admitindo que o I-131 seja totalmente blindado (atividade 0)\n");
+# printf("Na verdade, todos os  radionuclideos sao blindados dentro da sala\n");
+# printf("Mesmo assim, admite-se, conservadoramente, que os demais radionuclideos\n");
+# printf("nao sao blindados e que toda atividade nao eh usada e guardada na sala.\n\n");
+# atividade de iodo no rejeito eh zero
+#A(2) = 0;
+
 N = [1 1 1 1 1 1] * 5;
 t = 24.0;
 tu = 0.0;
@@ -469,17 +473,19 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 ##########################################################################
 
 
+# Esta parte do programa esta em testes e eh para propiciar uma tabela concisa
+# para levar os dados ao documento
 
+# [wfp doseSemBlindagem doseLimite x y z];
+printf(" W   F   P     Dose      Limite        Pb      Barita    Concreto\n");
+for i = 1:rows(dadosParaImpressao)
+	printf("%3d %3d ", dadosParaImpressao(i,1), dadosParaImpressao(i,2));
+	printf("%3d %10.2f ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
+	printf("%10.2f %10.2f ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
+	printf("%10.2f %10.2f\n", dadosParaImpressao(i,7), dadosParaImpressao(i,8));
+endfor
 
-
-
-
-
-
-
-
-
-
+printf("\n");
 
 
 
