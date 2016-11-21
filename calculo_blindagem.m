@@ -1,5 +1,5 @@
 # Autor: Sandro Roger Boschetti
-#  Data: 10 de outubro de 2016 as 17h13min
+#  Data: 10 de outubro de 2016 as 17h30min
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -24,7 +24,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Calculos realizados em 10 de outubro de 2016 as 17h13min\n\n");
+printf("Calculos realizados em 21 de novembro de 2016 as 12h59min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -37,7 +37,7 @@ Tf = [6.02 192 13.2235 78.24 73.0104 46.284];
 N = [60 10 5 4 2 1];
 
 # Atividade semanal total em Bq
-AsemanalBq = [1500 100 25 20 20 50] .* 37;
+#AsemanalBq = [1500 100 25 20 20 50] .* 37;
 
 # Atividade media administrada de cada radionuclideo em mCi
 # Esse valores podem ser alterados em locais onde ha consideracoes especiais
@@ -152,7 +152,7 @@ printf("Sala de Exame:\n\n");
 # o primeiro elemento da matriz dos gamas (Tc-99m) eh mudado aqui pois
 # essa area consta de fontes que sao pacientes cujos fotons sao blindados
 # em cerca de 50
-G(1) = 0.00705;
+G(1) = 0.00705; 
 AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
 N = [60 10 5 4 2 1];
 t = 0.5; tu = 1.5;
@@ -204,7 +204,8 @@ G(1) = 0.0141;
 printf("Suposicao que somente 10%% no material adquiro semanalmente vai para o rejeito\n");
 
 # atividade no rejeito eh 10%
-A = AsemanalBq .* 0.1;
+AmCi = [30 30 5 5 10 50];
+A = (AmCi .* 37) .* 0.1;
 
 # printf("Admitindo que o I-131 seja totalmente blindado (atividade 0)\n");
 # printf("Na verdade, todos os  radionuclideos sao blindados dentro da sala\n");
@@ -252,7 +253,7 @@ printf("Suposicao que cada um dos radionuclideos fica exposto um periodo igual n
 printf("Suposicao de que toda atividade recebida fica exposta\n\n");
 
 G(1) = 0.0141;
-A = AsemanalBq;
+AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
 N = [1 1 1 1 1 1] * 5;
 t = 2.0  / numel(AmCi);
 tu = 0.0;
@@ -290,7 +291,7 @@ printf("Suposicao de que cada radionuclideo autorizado fica exposto por um\n");
 printf("periodo de 10 minutos em sua atividade tipica de <<injecao>>\n");
 
 G(1) = 0.0141;
-A = AsemanalBq;
+AmCi = [30 30 5 5 10 50]; A = (AmCi .* 37) .* 0.1;
 N = [1 1 1 1 1 1] * 5;
 t = 10 / 60;
 tu = 0.0;
@@ -320,8 +321,7 @@ printf("Sala de Espera de Pacientes Injetados:\n\n");
 
 # o Gamao volta ao valor com a autoblindagem
 G(1) = 0.00705;
-AmCi = [30 30 5 5 10 50];
-A = AmCi .* 37;
+AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
 N = [60 10 5 4 2 1];
 t = 1.5;
 tu = 0.0;
@@ -360,8 +360,7 @@ printf("Sanitario Exclusivo de Pacientes Injetados:\n\n");
 printf("Suposicao de que cada paciente fica em media 10 minutos no sanitario\n\n");
 
 G(1) = 0.00705;
-AmCi = [30 30 5 5 10 50];
-A = AmCi .* 37;
+AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
 N = [60 10 5 4 2 1];
 t = 10/60;
 tu = 0.0;
@@ -396,8 +395,7 @@ printf("Ergometria:\n\n");
 printf("Suposicao de que essa sala eh usada apenas para pacientes com Tc-99m\n\n");
 
 G(1) = 0.00705;
-AmCi = [30 0 0 0 0 0];
-A = AmCi .* 37;
+AmCi = [30 0 0 0 0 0]; A = AmCi .* 37;
 N = [60 0 0 0 0 0];
 t = 30 / 60;
 tu = 0.0;
@@ -485,7 +483,11 @@ for i = 1:rows(dadosParaImpressao)
 	fprintf(fid, "%3d & %3d & ", dadosParaImpressao(i,1), dadosParaImpressao(i,2));
 	fprintf(fid, "%3d & %10.2f & ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
 	fprintf(fid, "%10.2f & %10.2f & ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
-	fprintf(fid, "%10.2f & ", dadosParaImpressao(i,7));
+	if (dadosParaImpressao(i,7) > 2.5)	
+    	fprintf(fid, "\\red{%10.2f} & ", dadosParaImpressao(i,7));
+    else
+    	fprintf(fid, "%10.2f & ", dadosParaImpressao(i,7));
+    endif
 	fprintf(fid, "%10.2f \\\\ \n", dadosParaImpressao(i,8));
 endfor
 fclose(fid);
