@@ -36,13 +36,14 @@ Tf = [6.02 192 13.2235 78.24 73.0104 46.284];
 # Para cada area considerada esses valores podem mudar
 N = [60 10 5 4 2 1];
 
-# Atividade semanal total em Bq
-#AsemanalBq = [1500 100 25 20 20 50] .* 37;
-
 # Atividade media administrada de cada radionuclideo em mCi
 # Esse valores podem ser alterados em locais onde ha consideracoes especiais
 # tais como Sala de Rejeitos, Laboratorio, Injecao e Ergometria
 AmCi = [30 30 5 5 10 50];
+
+# Atividade adquirida semanalmente a ser usada na sala de rejeitos
+# AmCi = [1500 100 25 20 20 50];
+
 # Atividade em MBq
 A = AmCi .* 37;
 
@@ -204,7 +205,7 @@ G(1) = 0.0141;
 printf("Suposicao que somente 10%% no material adquiro semanalmente vai para o rejeito\n");
 
 # atividade no rejeito eh 10%
-AmCi = [30 30 5 5 10 50];
+AmCi = [1500 100 25 20 20 50];
 A = (AmCi .* 37) .* 0.1;
 
 # printf("Admitindo que o I-131 seja totalmente blindado (atividade 0)\n");
@@ -291,7 +292,7 @@ printf("Suposicao de que cada radionuclideo autorizado fica exposto por um\n");
 printf("periodo de 10 minutos em sua atividade tipica de <<injecao>>\n");
 
 G(1) = 0.0141;
-AmCi = [30 30 5 5 10 50]; A = (AmCi .* 37) .* 0.1;
+AmCi = [30 30 5 5 10 50]; A = (AmCi .* 37);
 N = [1 1 1 1 1 1] * 5;
 t = 10 / 60;
 tu = 0.0;
