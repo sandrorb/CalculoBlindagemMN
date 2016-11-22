@@ -1,5 +1,5 @@
 # Autor: Sandro Roger Boschetti
-#  Data: 10 de outubro de 2016 as 17h30min
+#  Data: 22 de novembro de 2016 as 11h09min
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -24,7 +24,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Calculos realizados em 21 de novembro de 2016 as 12h59min\n\n");
+printf("Calculos realizados em 22 de novembro de 2016 as 11h09min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -154,7 +154,7 @@ printf("Sala de Exame:\n\n");
 # essa area consta de fontes que sao pacientes cujos fotons sao blindados
 # em cerca de 50
 G(1) = 0.00705; 
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
 N = [60 10 5 4 2 1];
 t = 0.5; tu = 1.5;
 
@@ -208,13 +208,6 @@ printf("Suposicao que somente 10%% no material adquiro semanalmente vai para o r
 AmCi = [1500 100 25 20 20 50];
 A = (AmCi .* 37) .* 0.1;
 
-# printf("Admitindo que o I-131 seja totalmente blindado (atividade 0)\n");
-# printf("Na verdade, todos os  radionuclideos sao blindados dentro da sala\n");
-# printf("Mesmo assim, admite-se, conservadoramente, que os demais radionuclideos\n");
-# printf("nao sao blindados e que toda atividade nao eh usada e guardada na sala.\n\n");
-# atividade de iodo no rejeito eh zero
-#A(2) = 0;
-
 N = [1 1 1 1 1 1] * 5;
 t = 24.0;
 tu = 0.0;
@@ -254,7 +247,7 @@ printf("Suposicao que cada um dos radionuclideos fica exposto um periodo igual n
 printf("Suposicao de que toda atividade recebida fica exposta\n\n");
 
 G(1) = 0.0141;
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+AmCi = [1500 100 25 20 20 50]; A = AmCi .* 37;
 N = [1 1 1 1 1 1] * 5;
 t = 2.0  / numel(AmCi);
 tu = 0.0;
@@ -322,7 +315,7 @@ printf("Sala de Espera de Pacientes Injetados:\n\n");
 
 # o Gamao volta ao valor com a autoblindagem
 G(1) = 0.00705;
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
 N = [60 10 5 4 2 1];
 t = 1.5;
 tu = 0.0;
@@ -361,7 +354,7 @@ printf("Sanitario Exclusivo de Pacientes Injetados:\n\n");
 printf("Suposicao de que cada paciente fica em media 10 minutos no sanitario\n\n");
 
 G(1) = 0.00705;
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
 N = [60 10 5 4 2 1];
 t = 10/60;
 tu = 0.0;
@@ -436,7 +429,7 @@ printf("calculo eh 1,5 m acima do piso do andar de cima.\n");
 printf("O pe-direito eh de 3,0 m.");
 
 G(1) = 0.00705;
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
 N = [60 10 5 4 2 1];
 t = 0.5; tu = 1.5;
 
