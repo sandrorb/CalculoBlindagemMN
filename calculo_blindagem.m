@@ -1,5 +1,6 @@
-# Autor: Sandro Roger Boschetti
-#  Data: 22 de novembro de 2016 as 11h09min
+#       Autor: Sandro Roger Boschetti
+#        Data: 22 de novembro de 2016 as 11h09min
+# Atualizacao: 07 de abril de 2017 as 21h24min
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -20,11 +21,11 @@
 # Variaveis globais usadas para acumular dados para impressao
 # dentro de uma funcao. A variavel wfp significa Wall Fonte Ponto
 global wfp;
-global dadosParaImpressao; 
+global dadosParaImpressao;
 
 clc;
 
-printf("Calculos realizados em 22 de novembro de 2016 as 11h09min\n\n");
+printf("Calculos realizados em 07 de abril de 2017 as 21h24min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -34,7 +35,8 @@ Tf = [6.02 192 13.2235 78.24 73.0104 46.284];
 
 # Numero de pacientes por semana para cada radionuclideo
 # Para cada area considerada esses valores podem mudar
-N = [60 10 5 4 2 1];
+NumeroPacientesTc99m = 120;
+N = [NumeroPacientesTc99m 10 5 4 2 1];
 
 # Atividade media administrada de cada radionuclideo em mCi
 # Esse valores podem ser alterados em locais onde ha consideracoes especiais
@@ -123,6 +125,7 @@ function calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite)
 
 	global wfp;
 	global dadosParaImpressao;
+  global contador;
 
 	doseSemBlindagem = calculaDose(G, A, N, t, tu, T, d, Tf);
 	[x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite);
@@ -137,7 +140,6 @@ function calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite)
 	wfp = [wfp doseLimite sum(doseSemBlindagem) x y z];
  	dadosParaImpressao = vertcat(dadosParaImpressao, wfp);
  	wfp = aux;
-	
 endfunction
 ##########################################################################
 
@@ -153,9 +155,13 @@ printf("Sala de Exame:\n\n");
 # o primeiro elemento da matriz dos gamas (Tc-99m) eh mudado aqui pois
 # essa area consta de fontes que sao pacientes cujos fotons sao blindados
 # em cerca de 50
-G(1) = 0.00705; 
+#G(1) = 0.00705;
+
+# Conforme solicitado pela CNEN, nao sera considerada a atenuacao pelo paciente
+G(1) = 0.0141;
+
 AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
-N = [60 10 5 4 2 1];
+N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 0.5; tu = 1.5;
 
 # A variavel wfp encerra os valores da parede (w), da fonte (f) e do ponto (p)
@@ -314,9 +320,13 @@ printf("\n");
 printf("Sala de Espera de Pacientes Injetados:\n\n");
 
 # o Gamao volta ao valor com a autoblindagem
-G(1) = 0.00705;
+#G(1) = 0.00705;
+
+# Conforme solicitado pela CNEN, nao sera considerada a atenuacao pelo paciente
+G(1) = 0.0141;
+
 AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
-N = [60 10 5 4 2 1];
+N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 1.5;
 tu = 0.0;
 
@@ -353,9 +363,13 @@ printf("Sanitario Exclusivo de Pacientes Injetados:\n\n");
 
 printf("Suposicao de que cada paciente fica em media 10 minutos no sanitario\n\n");
 
-G(1) = 0.00705;
+#G(1) = 0.00705;
+
+# Conforme solicitado pela CNEN, nao sera considerada a atenuacao pelo paciente
+G(1) = 0.0141;
+
 AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
-N = [60 10 5 4 2 1];
+N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 10/60;
 tu = 0.0;
 
@@ -388,9 +402,13 @@ printf("Ergometria:\n\n");
 
 printf("Suposicao de que essa sala eh usada apenas para pacientes com Tc-99m\n\n");
 
-G(1) = 0.00705;
+#G(1) = 0.00705;
+
+# Conforme solicitado pela CNEN, nao sera considerada a atenuacao pelo paciente
+G(1) = 0.0141;
+
 AmCi = [30 0 0 0 0 0]; A = AmCi .* 37;
-N = [60 0 0 0 0 0];
+N = [NumeroPacientesTc99m 0 0 0 0 0];
 t = 30 / 60;
 tu = 0.0;
 
@@ -426,11 +444,15 @@ printf("Sala Acima da Sala de Exames: \n\n");
 
 printf("Suposicao de que a dose parte de uma altura de 1,5 m. O ponto de\n");
 printf("calculo eh 1,5 m acima do piso do andar de cima.\n");
-printf("O pe-direito eh de 3,0 m.");
+printf("O pe-direito eh de 3,0 m.\n\n");
 
-G(1) = 0.00705;
+#G(1) = 0.00705;
+
+# Conforme solicitado pela CNEN, nao sera considerada a atenuacao pelo paciente
+G(1) = 0.0141;
+
 AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
-N = [60 10 5 4 2 1];
+N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 0.5; tu = 1.5;
 
 wfp = [41 1 39]; 
@@ -455,7 +477,7 @@ wfp = [42 8 40];
 
 G(1) = 0.00705;
 AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
-N = [60 10 5 4 2 1];
+N = [NumeroPacientesTc99m 10 5 4 2 1];
 
 t = 1 / 4000;
 tu = 0.0;
@@ -488,8 +510,7 @@ fclose(fid);
 
 printf("\n");
 
-
-
-
+#clear wfp dadosParaImpressao;
+clear -all;
 
 
