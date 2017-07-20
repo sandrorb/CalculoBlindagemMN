@@ -1,6 +1,7 @@
 #       Autor: Sandro Roger Boschetti
 #        Data: 22 de novembro de 2016 as 11h09min
 # Atualizacao: 07 de abril de 2017 as 21h24min
+# Atualizacao: 20 de julho de 2017 as 14h04min
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -25,7 +26,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Calculos realizados em 07 de abril de 2017 as 21h24min\n\n");
+printf("Calculos realizados em 20 de julho de 2017 as 14h04min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -54,7 +55,8 @@ A = AmCi .* 37;
 G = [0.0141 0.07647 0.07478 0.03004 0.02372 0.02440];
 
 # Camadas semirredutoras em cm para o Pb
-csrPb = [0.017 0.233 0.039 0.034 0.017 0.014];
+#csrPb = [0.017 0.233 0.039 0.034 0.017 0.014];
+csrPb = [0.025 0.233 0.039 0.034 0.017 0.014];
 
 # Camadas semirredutoras em cm para a barita
 csrBarita = [0.272 1.776 0.580 0.508 0.149 0.056];
