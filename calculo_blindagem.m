@@ -498,13 +498,13 @@ fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto}  \\\\ \\hline \n");
 for i = 1:rows(dadosParaImpressao)
 	fprintf(fid, "%3d & %3d & ", dadosParaImpressao(i,1), dadosParaImpressao(i,2));
 	fprintf(fid, "%3d & %10.2f & ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
-	fprintf(fid, "%10.2f & %10.2f & ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
+	fprintf(fid, "%10.2f & %10.3f & ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
 	if (dadosParaImpressao(i,7) > 2.5)	
-    	fprintf(fid, "\\red{%10.2f} & ", dadosParaImpressao(i,7));
+    	fprintf(fid, "\\red{%10.3f} & ", dadosParaImpressao(i,7));
     else
-    	fprintf(fid, "%10.2f & ", dadosParaImpressao(i,7));
+    	fprintf(fid, "%10.3f & ", dadosParaImpressao(i,7));
     endif
-	fprintf(fid, "%10.2f \\\\ \n", dadosParaImpressao(i,8));
+	fprintf(fid, "%10.3f \\\\ \n", dadosParaImpressao(i,8));
 endfor
 fclose(fid);
 
