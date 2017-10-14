@@ -2,6 +2,7 @@
 #        Data: 22 de novembro de 2016 as 11h09min
 # Atualizacao: 07 de abril de 2017 as 21h24min
 # Atualizacao: 20 de julho de 2017 as 14h04min
+# Atualizacao: 13 de outubro de 2017 as 22h52min para outro SMN
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -26,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Calculos realizados em 20 de julho de 2017 as 14h04min\n\n");
+printf("Calculos realizados em 13 de outubro de 2017 as 22h52min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -51,7 +52,8 @@ AmCi = [30 30 5 5 10 50];
 A = AmCi .* 37;
 
 # Gamao em (microSv m^2) / (Mbq h)
-# G(1) = 0.00705 para o Tc-99m quando a fonte eh o paciente e 0.0141 caso contrario
+# G(1) = 0.00705 para o Tc-99m quando a fonte eh o paciente e 0.0141 caso
+# contrario. Mas a CNEN nao aceitou considerar a atenuacao.
 G = [0.0141 0.07647 0.07478 0.03004 0.02372 0.02440];
 
 # Camadas semirredutoras em cm para o Pb
@@ -86,6 +88,7 @@ function [x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite)
 	doseComBlindagem = doseSemBlindagem .* exp (- mu(1,:) * x);
 	doseInicial = sum(doseComBlindagem);
 	
+  # mu(1,:) Pb 
 	while (sum(doseComBlindagem) > doseLimite) 
 		x = x + delta;
 		doseComBlindagem = doseSemBlindagem .* exp (- mu(1,:) * x);
@@ -95,6 +98,7 @@ function [x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite)
 	doseComBlindagem = doseSemBlindagem .* exp (- mu(2,:) * y);
 	doseInicial = sum(doseComBlindagem);
 
+  # mu(2,:) Barita
 	while (sum(doseComBlindagem) > doseLimite) 
 		y = y + delta;
 		doseComBlindagem = doseSemBlindagem .* exp (- mu(2,:) * y);
@@ -104,6 +108,7 @@ function [x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite)
 	doseComBlindagem = doseSemBlindagem .* exp (- mu(3,:) * z);
 	doseInicial = sum(doseComBlindagem);
 
+  # mu(3,:) Concreto
 	while (sum(doseComBlindagem) > doseLimite) 
 		z = z + delta;
 		doseComBlindagem = doseSemBlindagem .* exp (- mu(3,:) * z);
@@ -150,253 +155,6 @@ endfunction
 printf("W significa Parede ou Porta. F, fonte e P, ponto de interesse.\n\n\n");
 
 ##########################################################################
-printf("Sala de Exame:\n\n");
-
-# parametros fixos para a Sala de Exames
-
-# o primeiro elemento da matriz dos gamas (Tc-99m) eh mudado aqui pois
-# essa area consta de fontes que sao pacientes cujos fotons sao blindados
-# em cerca de 50
-#G(1) = 0.00705;
-
-# Conforme solicitado pela CNEN, nao sera considerada a atenuacao pelo paciente
-G(1) = 0.0141;
-
-AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 0.5; tu = 1.5;
-
-# A variavel wfp encerra os valores da parede (w), da fonte (f) e do ponto (p)
-wfp = [1 1 1];
-T = 1/5; d = 1.82; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [2 1 2];
-T = 1/5; d = 2.89; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [3 1 3];
-T = 1/5; d = 2.51; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Porta da Sala de Exames
-wfp = [4 1 4];
-T = 1/5; d = 3.78; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [5 1 5];
-T = 1/5; d = 3.9; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [6 1 6];
-T = 1/20; d = 3.23; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-##########################################################################
-
-
-
-
-##########################################################################
-printf("Sala de Rejeitos:\n\n");
-
-# parametros fixos para a Sala de Rejeitos
-# apenas uma dose (N = 1)*5 de cada radionuclideo com atividade total da semana
-# por 24 horas por dia decaindo fora da blindagem.
-# Aproximacao: no caso dos radionuclideos exceto Tc-99m, ha um overlap de doses
-# semanais que nao eh considerado.
-
-# o Gamao do Tc-99m volta ao normal ja que nao ha auto blindagem
-G(1) = 0.0141;
-
-printf("Suposicao que somente 10%% no material adquiro semanalmente vai para o rejeito\n");
-
-# atividade no rejeito eh 10%
-AmCi = [1500 100 25 20 20 50];
-A = (AmCi .* 37) .* 0.1;
-
-N = [1 1 1 1 1 1] * 5;
-t = 24.0;
-tu = 0.0;
-
-wfp = [7 2 7];
-T = 1/5; d = 1.32; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [8 2 8];
-T = 1/5; d = 1.47; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# foi posto aqui a dose limite de publico no intuito de se proteger o
-# detector da radiacao da sala de rejeitos
-printf("Para esse conjunto de fonte/parede/ponto abaixo, foi estabelecido o limite\n");
-printf("de publico para se ter uma blindagem boa para o detector e minimizar\n");
-printf("a possibilidade de interferencia nos exames devido a radiacao da Sala\n");
-printf("de Rejeitos\n\n");
-wfp = [9 2 9];
-T = 1/5; d = 1.44; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [10 2 10];
-T = 1/5; d = 1.62; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-##########################################################################
-
-
-
-##########################################################################
-printf("Laboratorio de Manipulacao e Armazenamento de Fontes em Uso:\n\n");
-
-printf("Suposicao de que algum radionuclideo fica exposto sem blindagem por 2 h / dia\n");
-printf("Suposicao que cada um dos radionuclideos fica exposto um periodo igual nessas 2 h\n");
-printf("Suposicao de que toda atividade recebida fica exposta\n\n");
-
-G(1) = 0.0141;
-AmCi = [1500 100 25 20 20 50]; A = AmCi .* 37;
-N = [1 1 1 1 1 1] * 5;
-t = 2.0  / numel(AmCi);
-tu = 0.0;
-
-wfp = [11 3 11]; T = 1/5; d = 2.6; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [12 3 12]; T = 1; d = 2.09; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [13 3 13]; T = 1/5; d = 1.89; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [14 3 14]; T = 1/20; d = 2.13; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [15 3 15]; T = 1/5; d = 1.89; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [16 3 16]; T = 1/5; d = 1.73; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-##########################################################################
-
-
-
-##########################################################################
-printf("Sala de Administracao de Radiofarmacos:\n\n");
-
-# Suposicao de que cada radionuclideo autorizado fica exposto por um
-# periodo de 10 minutos em sua atividade tipica de "injecao".
-
-printf("Suposicao de que cada radionuclideo autorizado fica exposto por um\n");
-printf("periodo de 10 minutos em sua atividade tipica de <<injecao>>\n");
-
-G(1) = 0.0141;
-AmCi = [30 30 5 5 10 50]; A = (AmCi .* 37);
-N = [1 1 1 1 1 1] * 5;
-t = 10 / 60;
-tu = 0.0;
-
-wfp = [17 4 17]; T = 1/5; d = 1.78; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [18 4 18]; T = 1/20; d = 1.92; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# o T = 1 e o limite = 20 devem ser iguais aos do ponto 12
-wfp = [19 4 19]; T = 1; d = 1.77; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [20 4 20]; T = 1/5; d = 1.91; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [21 4 21]; T = 1/5; d = 1.43; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-##########################################################################
-
-
-##########################################################################
-printf("Sala de Espera de Pacientes Injetados:\n\n");
-
-# o Gamao volta ao valor com a autoblindagem
-#G(1) = 0.00705;
-
-# Conforme solicitado pela CNEN, nao sera considerada a atenuacao pelo paciente
-G(1) = 0.0141;
-
-AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 1.5;
-tu = 0.0;
-
-wfp = [22 5 22]; T = 1/20; d = 2.96; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("Como eh ponto cruzado, o limite eh dividido por 2\n");
-wfp = [23 5 23]; T = 1/20; d = 2.78; doseLimite = 20/2;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("O T = 1/5 justifica-se pois o funcionario nao fica a parede o tempo todo\n");
-wfp = [24 5 24]; T = 1/5; d = 1.11; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [25 5 25]; T = 1/20; d = 3.28; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [26 5 26]; T = 1/5; d = 4.5; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [27 5 27]; T = 1/5; d = 3.0; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [28 5 28]; T = 1/5; d = 2.23; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-##########################################################################
-
-
-
-##########################################################################
-printf("Sanitario Exclusivo de Pacientes Injetados:\n\n");
-
-printf("Suposicao de que cada paciente fica em media 10 minutos no sanitario\n\n");
-
-#G(1) = 0.00705;
-
-# Conforme solicitado pela CNEN, nao sera considerada a atenuacao pelo paciente
-G(1) = 0.0141;
-
-AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 10/60;
-tu = 0.0;
-
-wfp = [29 6 29]; T = 1/5; d = 1.16; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("Como eh ponto cruzado, o limite eh dividido por 2\n");
-wfp = [30 6 30]; T = 1; d = 1.82; doseLimite = 20/2;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("Como eh ponto cruzado, o limite eh dividido por 2\n");
-wfp = [31 6 23]; T = 1/20; d = 1.85; doseLimite = 20/2;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [32 6 31]; T = 1/20; d = 1.26; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [33 6 32]; T = 1/5; d = 1.55; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-##########################################################################
-
-
-##########################################################################
 printf("Ergometria:\n\n");
 
 # Consideracao de que apenas fontes de Tc-99m com dose tipica de 30 mCi
@@ -404,89 +162,29 @@ printf("Ergometria:\n\n");
 
 printf("Suposicao de que essa sala eh usada apenas para pacientes com Tc-99m\n\n");
 
-#G(1) = 0.00705;
-
-# Conforme solicitado pela CNEN, nao sera considerada a atenuacao pelo paciente
-G(1) = 0.0141;
-
 AmCi = [30 0 0 0 0 0]; A = AmCi .* 37;
 N = [NumeroPacientesTc99m 0 0 0 0 0];
 t = 30 / 60;
 tu = 0.0;
 
-wfp = [34 7 33]; T = 1/20; d = 2.0; doseLimite = 20;
+wfp = [1 1 1]; T = 1/5; d = 2.0; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [35 7 34]; T = 1/20; d = 2.41; doseLimite = 20;
+wfp = [2 1 2]; T = 1; d = 1.8; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [36 7 35]; T = 1; d = 1.55; doseLimite = 20;
+wfp = [3 1 3]; T = 1/40; d = 2.21; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-printf("Como eh ponto cruzado, o limite eh dividido por 2\n");
-wfp = [37 7 30]; T = 1; d = 2.57; doseLimite = 20/2;
+wfp = [4 1 4]; T = 1/5; d = 2.2; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [38 7 36]; T = 1/20; d = 3.15; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [39 7 37]; T = 1/5; d = 1.59; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [40 7 38]; T = 1/20; d = 2.12; doseLimite = 20;
+wfp = [5 1 5]; T = 1/5; d = 2.24; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 ##########################################################################
 
-
-
-##########################################################################
-printf("Sala Acima da Sala de Exames: \n\n");
-
-printf("Suposicao de que a dose parte de uma altura de 1,5 m. O ponto de\n");
-printf("calculo eh 1,5 m acima do piso do andar de cima.\n");
-printf("O pe-direito eh de 3,0 m.\n\n");
-
-#G(1) = 0.00705;
-
-# Conforme solicitado pela CNEN, nao sera considerada a atenuacao pelo paciente
-G(1) = 0.0141;
-
-AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 0.5; tu = 1.5;
-
-wfp = [41 1 39]; 
-peDireito = 3.0;
-T = 1; d = peDireito - 1.5 + 1.5; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-##########################################################################
-
-##########################################################################
-printf("Muro/Parede ao longo do corredor: \n\n");
-
-# Para calcular o tempo que um paciente gasta em um trecho de 1 m
-# caminhando 4 km/h = 4000 m / h
-
-printf("O calculo eh feito para cada metro de parede. Supoe-se que o paciente\n");
-printf("anda a uma velocidade de 4 km/h (4000 m/h). O tempo que cada paciente\n");
-printf("fica em cada metro de parede eh de (1 m) / (4000 m/h)\n\n");
-
-wfp = [42 8 40]; 
-
-G(1) = 0.00705;
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-
-t = 1 / 4000;
-tu = 0.0;
-
-T = 1; d = 1.2/2 + 0.15 + 0.3; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-##########################################################################
 
 
 
