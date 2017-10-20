@@ -185,6 +185,50 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 printf("\n");
 ##########################################################################
 
+#clear wfp dadosParaImpressao;
+#clear -all;
+
+#clear wfp, dadosParaImpressao;
+
+
+
+########################################################################
+########################################################################
+########################################################################
+#global wfp = [];
+#global dadosParaImpressao = [];
+
+##########################################################################
+printf("Laboratorio:\n\n");
+
+# Consideracao de que apenas fontes de Tc-99m com dose tipica de 30 mCi
+# ficam expostas por um periodo aproximado do procedimento de 30 minutos
+
+printf("Suposicao de que essa sala eh usada apenas para pacientes com Tc-99m\n\n");
+
+AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+NumeroPacientesTc99m = 120;
+N = [NumeroPacientesTc99m 10 5 4 2 1];
+t = 30 / 60;
+tu = 0.0;
+
+wfp = [6 2 6]; T = 1/5; d = 1.97; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [7 2 7]; T = 1/5; d = 2.11; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [8 2 38; T = 1; d = 1.64; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [9 2 9]; T = 1/40; d = 2.31; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [10 2 10]; T = 1; d = 1.93; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("\n");
+##########################################################################
 
 
 
@@ -210,7 +254,4 @@ fclose(fid);
 
 printf("\n");
 
-#clear wfp dadosParaImpressao;
 clear -all;
-
-
