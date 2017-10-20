@@ -2,7 +2,7 @@
 #        Data: 22 de novembro de 2016 as 11h09min
 # Atualizacao: 07 de abril de 2017 as 21h24min
 # Atualizacao: 20 de julho de 2017 as 14h04min
-# Atualizacao: 20 de outubro de 2017 as 15h16min para outro SMN
+# Atualizacao: 20 de outubro de 2017 as 16h02min para outro SMN
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Calculos realizados em 20 de outubro de 2017 as 15h16min\n\n");
+printf("Calculos realizados em 20 de outubro de 2017 as 16h02min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -164,7 +164,7 @@ printf("Suposicao de que essa sala eh usada apenas para pacientes com Tc-99m\n\n
 
 AmCi = [30 0 0 0 0 0]; A = AmCi .* 37;
 NumeroPacientesTc99m = 120;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
+N = [NumeroPacientesTc99m 0 0 0 0 0];
 t = 30 / 60;
 tu = 0.0;
 
@@ -228,7 +228,7 @@ printf("Laboratorio:\n\n");
 printf("Suposicao de que essa sala eh usada apenas para pacientes com Tc-99m\n\n");
 
 AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 0 0 0 0 0];
+N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 30 / 60;
 tu = 0.0;
 
@@ -273,6 +273,81 @@ endfor
 fclose(fid);
 
 printf("\n");
+
+
+
+
+
+
+
+
+wfp = [];
+dadosParaImpressao = [];
+
+##########################################################################
+printf("Administracao de Radiofarmacos:\n\n");
+
+# Consideracao de que apenas fontes de Tc-99m com dose tipica de 30 mCi
+# ficam expostas por um periodo aproximado do procedimento de 30 minutos
+
+printf("Suposicao de que essa sala eh usada apenas para pacientes com Tc-99m\n\n");
+
+AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+N = [NumeroPacientesTc99m 10 5 4 2 1];
+t = 30 / 60;
+tu = 0.0;
+
+wfp = [1 1 1]; T = 1/5; d = 1.96; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [2 1 2]; T = 1/5; d = 1.41; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [3 1 3]; T = 1/40; d = 2.41; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [4 1 4]; T = 1/5; d = 1.44; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [5 1 5]; T = 1/5; d = 2.06; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("\n");
+##########################################################################
+
+# Saida de dados para tabela LaTeX
+# Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
+
+fid = fopen("tabela_dados_administracao.tex", "w");
+fprintf(fid, "\\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
+fprintf(fid, "\\textbf{Limite} & \\textbf{Dose} & \\textbf{Pb} & ");
+fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto}  \\\\ \\hline \n");
+for i = 1:rows(dadosParaImpressao)
+	fprintf(fid, "%3d & %3d & ", dadosParaImpressao(i,1), dadosParaImpressao(i,2));
+	fprintf(fid, "%3d & %10.2f & ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
+	fprintf(fid, "%10.2f & %10.3f & ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
+	if (dadosParaImpressao(i,7) > 2.5)	
+    	fprintf(fid, "\\red{%10.3f} & ", dadosParaImpressao(i,7));
+    else
+    	fprintf(fid, "%10.3f & ", dadosParaImpressao(i,7));
+    endif
+	fprintf(fid, "%10.3f \\\\ \n", dadosParaImpressao(i,8));
+endfor
+fclose(fid);
+
+printf("\n");
+
+
+
+
+
+
+
+
+
+
+
+
 
 #clear wfp dadosParaImpressao;
 clear -all;
