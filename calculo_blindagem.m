@@ -1,17 +1,12 @@
 #       Autor: Sandro Roger Boschetti
-#        Data: 22 de novembro de 2016 as 11h09min
-# Atualizacao: 07 de abril de 2017 as 21h24min
-# Atualizacao: 20 de julho de 2017 as 14h04min
-# Atualizacao: 21 de outubro de 2017 as 13h12min para outro SMN
+#        Data: 22 de novembro de 2016 às 11h09min
+# Atualizacao: 21 de outubro de 2017 às 13h12min para outro SMN
 
-# Programa implementado para a realizacao de calculos de blindagem
-# em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
-# para ficar compativel com alguns sistemas que nao utilizam a 
-# encodificacao UTF-8, como o pacote listings do LaTeX utilizado
-# para a listagem de codigos.
+# Programa implementado para a realização de cálculos de blindagem
+# em medicina nuclear.
 
-# Para executar esse codigo basta fazer um copiar e colar do conteudo
-# desse arquivo para o sitehttp://octave-online.net
+# Para executar esse código basta fazer um copiar e colar do conteúdo
+# desse arquivo para o site http://octave-online.net
 
 # Esse programa encontra-se por tempo indeterminado em:
 # https://github.com/sandrorb/CalculoBlindagemMN
@@ -20,8 +15,8 @@
 
 # source('calculo_blindagem.m');
 
-# Variaveis globais usadas para acumular dados para impressao
-# dentro de uma funcao. A variavel wfp significa Wall Fonte Ponto
+# Variáveis globais usadas para acumular dados para impressão
+# dentro de uma função. A variável wfp significa Wall Fonte Ponto
 global wfp;
 global dadosParaImpressao;
 
