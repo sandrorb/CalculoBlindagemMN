@@ -2,7 +2,7 @@
 #        Data: 22 de novembro de 2016 as 11h09min
 # Atualizacao: 07 de abril de 2017 as 21h24min
 # Atualizacao: 20 de julho de 2017 as 14h04min
-# Atualizacao: 21 de outubro de 2017 as 12h49min para outro SMN
+# Atualizacao: 21 de outubro de 2017 as 13h12min para outro SMN
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Calculos realizados em 21 de outubro de 2017 as 12h49min\n\n");
+printf("Calculos realizados em 21 de outubro de 2017 as 13h12min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -151,6 +151,30 @@ endfunction
 ##########################################################################
 
 
+##########################################################################
+# Saida de dados para tabela LaTeX
+# Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
+function printLatex(fn)
+  global dadosParaImpressao;
+  fid = fopen(fn, "w");
+  fprintf(fid, "\\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
+  fprintf(fid, "\\textbf{Limite} & \\textbf{Dose} & \\textbf{Pb} & ");
+  fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto}  \\\\ \\hline \n");
+  for i = 1:rows(dadosParaImpressao)
+	  fprintf(fid, "%3d & %3d & ", dadosParaImpressao(i,1), dadosParaImpressao(i,2));
+	  fprintf(fid, "%3d & %10.2f & ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
+	  fprintf(fid, "%10.2f & %10.3f & ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
+	  if (dadosParaImpressao(i,7) > 2.5)	
+      	fprintf(fid, "\\red{%10.3f} & ", dadosParaImpressao(i,7));
+      else
+    	  fprintf(fid, "%10.3f & ", dadosParaImpressao(i,7));
+      endif
+	  fprintf(fid, "%10.3f \\\\ \n", dadosParaImpressao(i,8));
+  endfor
+  fclose(fid);
+endfunction
+##########################################################################
+
 
 printf("W significa Parede ou Porta. F, fonte e P, ponto de interesse.\n\n\n");
 
@@ -184,38 +208,12 @@ wfp = [5 1 5]; T = 1/5; d = 2.24; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
-##########################################################################
 
-# Saida de dados para tabela LaTeX
-# Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
-
-fid = fopen("tabela_dados_ergometria.tex", "w");
-fprintf(fid, "\\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
-fprintf(fid, "\\textbf{Limite} & \\textbf{Dose} & \\textbf{Pb} & ");
-fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto}  \\\\ \\hline \n");
-for i = 1:rows(dadosParaImpressao)
-	fprintf(fid, "%3d & %3d & ", dadosParaImpressao(i,1), dadosParaImpressao(i,2));
-	fprintf(fid, "%3d & %10.2f & ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
-	fprintf(fid, "%10.2f & %10.3f & ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
-	if (dadosParaImpressao(i,7) > 2.5)	
-    	fprintf(fid, "\\red{%10.3f} & ", dadosParaImpressao(i,7));
-    else
-    	fprintf(fid, "%10.3f & ", dadosParaImpressao(i,7));
-    endif
-	fprintf(fid, "%10.3f \\\\ \n", dadosParaImpressao(i,8));
-endfor
-fclose(fid);
-
-printf("\n");
-
-
-##########################################################################
-##########################################################################
+printLatex("tabela_dados_ergometria.tex");
 ##########################################################################
 
 
 
-#clear wfp, dadosParaImpressao;
 wfp = [];
 dadosParaImpressao = [];
 
@@ -248,37 +246,9 @@ wfp = [5 1 5]; T = 1/5; d = 1.93; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
+
+printLatex("tabela_dados_laboratorio.tex");
 ##########################################################################
-
-
-
-# Saida de dados para tabela LaTeX
-# Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
-
-fid = fopen("tabela_dados_laboratorio.tex", "w");
-fprintf(fid, "\\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
-fprintf(fid, "\\textbf{Limite} & \\textbf{Dose} & \\textbf{Pb} & ");
-fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto}  \\\\ \\hline \n");
-for i = 1:rows(dadosParaImpressao)
-	fprintf(fid, "%3d & %3d & ", dadosParaImpressao(i,1), dadosParaImpressao(i,2));
-	fprintf(fid, "%3d & %10.2f & ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
-	fprintf(fid, "%10.2f & %10.3f & ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
-	if (dadosParaImpressao(i,7) > 2.5)	
-    	fprintf(fid, "\\red{%10.3f} & ", dadosParaImpressao(i,7));
-    else
-    	fprintf(fid, "%10.3f & ", dadosParaImpressao(i,7));
-    endif
-	fprintf(fid, "%10.3f \\\\ \n", dadosParaImpressao(i,8));
-endfor
-fclose(fid);
-
-printf("\n");
-
-
-
-
-
-
 
 
 wfp = [];
@@ -313,39 +283,9 @@ wfp = [5 1 5]; T = 1/5; d = 2.06; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
+
+printLatex("tabela_dados_administracao.tex");
 ##########################################################################
-
-# Saida de dados para tabela LaTeX
-# Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
-
-fid = fopen("tabela_dados_administracao.tex", "w");
-fprintf(fid, "\\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
-fprintf(fid, "\\textbf{Limite} & \\textbf{Dose} & \\textbf{Pb} & ");
-fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto}  \\\\ \\hline \n");
-for i = 1:rows(dadosParaImpressao)
-	fprintf(fid, "%3d & %3d & ", dadosParaImpressao(i,1), dadosParaImpressao(i,2));
-	fprintf(fid, "%3d & %10.2f & ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
-	fprintf(fid, "%10.2f & %10.3f & ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
-	if (dadosParaImpressao(i,7) > 2.5)	
-    	fprintf(fid, "\\red{%10.3f} & ", dadosParaImpressao(i,7));
-    else
-    	fprintf(fid, "%10.3f & ", dadosParaImpressao(i,7));
-    endif
-	fprintf(fid, "%10.3f \\\\ \n", dadosParaImpressao(i,8));
-endfor
-fclose(fid);
-
-printf("\n");
-
-
-
-
-
-
-
-
-
-
 
 
 
