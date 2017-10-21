@@ -2,7 +2,7 @@
 #        Data: 22 de novembro de 2016 as 11h09min
 # Atualizacao: 07 de abril de 2017 as 21h24min
 # Atualizacao: 20 de julho de 2017 as 14h04min
-# Atualizacao: 20 de outubro de 2017 as 16h02min para outro SMN
+# Atualizacao: 21 de outubro de 2017 as 12h49min para outro SMN
 
 # Programa implementado para a realizacao de calculos de blindagem
 # em medicina nuclear. O texto eh escrito sem acentos e cedilhas 
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Calculos realizados em 20 de outubro de 2017 as 16h02min\n\n");
+printf("Calculos realizados em 21 de outubro de 2017 as 12h49min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -189,7 +189,7 @@ printf("\n");
 # Saida de dados para tabela LaTeX
 # Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
 
-fid = fopen("tabela_dados.tex", "w");
+fid = fopen("tabela_dados_ergometria.tex", "w");
 fprintf(fid, "\\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
 fprintf(fid, "\\textbf{Limite} & \\textbf{Dose} & \\textbf{Pb} & ");
 fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto}  \\\\ \\hline \n");
