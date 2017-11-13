@@ -1,6 +1,6 @@
 #       Autor: Sandro Roger Boschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualizacao: 26 de outubro de 2017 às 10h19min
+# Atualizacao: 13 de novembro de 2017 às 09h19min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -22,7 +22,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Calculos realizados em 21 de outubro de 2017 as 10h19min\n\n");
+printf("Calculos realizados em 13 de novembro de 2017 às 09h19min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
