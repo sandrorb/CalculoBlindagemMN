@@ -469,6 +469,74 @@ printLatex("tabela_dados_espera_injetados.tex");
 ##########################################################################
 
 
+wfp = [];
+dadosParaImpressao = [];
+
+##########################################################################
+printf("Corredor de Saída à Área Interna do Hospital:\n\n");
+
+AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+N = [NumeroPacientesTc99m 10 5 4 2 1];
+t = 10 / 60;
+tu = 0;
+
+wfp = [1 1 1]; T = 1/8; d = 3.10; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [2 1 2]; T = 1; d = 1.30; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [3 1 3]; T = 1/5; d = 1.07; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Piso
+wfp = [4 1 7]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Teto
+wfp = [5 1 8]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("\n");
+
+printLatex("tabela_dados_corredor.tex");
+##########################################################################
+
+wfp = [];
+dadosParaImpressao = [];
+
+##########################################################################
+printf("Vestiário Ergometria:\n\n");
+
+AmCi = [30 0 0 0 0 0]; A = AmCi .* 37;
+N = [NumeroPacientesTc99m 10 5 4 2 1];
+t = 10 / 60;
+tu = 0;
+
+wfp = [1 1 1]; T = 1; d = 0.80; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [2 1 2]; T = 1; d = 0.90; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [3 1 3]; T = 1/5; d = 1.20; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [4 1 4]; T = 1/5; d = 0.85; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Piso
+wfp = [5 1 7]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Teto
+wfp = [6 1 8]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("\n");
+
+printLatex("tabela_dados_vestiario_ergo.tex");
+##########################################################################
 
 #clear wfp dadosParaImpressao;
 clear -all;
