@@ -1,6 +1,6 @@
 #       Autor: Sandro Roger Boschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualizacao: 13 de novembro de 2017 às 14h15min
+# Atualizacao: 22 de janeiro de 2018 às 13h08min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -22,7 +22,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 13 de novembro de 2017 às 14h15min\n\n");
+printf("Cálculos realizados em 22 de janeiro de 2018 às 13h08min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -473,7 +473,7 @@ wfp = [];
 dadosParaImpressao = [];
 
 ##########################################################################
-printf("Corredor de Saída à Área Interna do Hospital:\n\n");
+printf("Corredor de Saída para Área Interna do Hospital:\n\n");
 
 AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
 N = [NumeroPacientesTc99m 10 5 4 2 1];
