@@ -1,6 +1,6 @@
 #       Autor: Sandro Roger Boschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualizacao: 22 de janeiro de 2018 às 13h08min
+# Atualizacao: 29 de janeiro de 2018 às 13h58min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -22,7 +22,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 22 de janeiro de 2018 às 13h08min\n\n");
+printf("Cálculos realizados em 29 de janeiro de 2018 às 13h58min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -41,7 +41,7 @@ N = [NumeroPacientesTc99m 10 5 4 2 1];
 AmCi = [30 30 5 5 10 50];
 
 # Atividade adquirida semanalmente a ser usada na sala de rejeitos
-# AmCi = [1500 100 25 20 20 50];
+# AmCi = [1500 560 25 20 20 50];
 
 # Atividade em MBq
 A = AmCi .* 37;
@@ -66,7 +66,7 @@ csrConcreto = [1.911 3.018 2.208 2.142 1.653 1.195];
 # Arranjo bidimensional dos dados das camadas semirredutoras. 
 # Os ponto-e-virgulas separam as linhas da matriz enquanto os espacos
 # (ou virgulas) separam as colunas.
-csr = [ csrPb; csrBarita; csrConcreto];
+csr = [csrPb; csrBarita; csrConcreto];
 
 # Coeficiente de atenuacao linear em 1/cm
 mu = log(2) ./ csr;
@@ -75,6 +75,7 @@ mu = log(2) ./ csr;
 
 
 ##########################################################################
+# x eh a espessura de Pb, y eh a de Barita e z a de Concreto
 function [x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite)
 
 	delta = 0.001;
@@ -182,7 +183,7 @@ printf("Ergometria:\n\n");
 printf("Suposição de que essa sala é usada apenas para pacientes com Tc-99m\n\n");
 
 AmCi = [30 0 0 0 0 0]; A = AmCi .* 37;
-NumeroPacientesTc99m = 120;
+NumeroPacientesTc99m = 120; # numero super estimado
 N = [NumeroPacientesTc99m 0 0 0 0 0];
 t = 30 / 60;
 tu = 0.0;
@@ -224,12 +225,12 @@ dadosParaImpressao = [];
 printf("Laboratório:\n\n");
 
 printf("Admite-se que todas as fontes estão blindadas a não ser durante\n");
-printf("o preparo de cada dose. Conservadoramente o tempo de preparo é 40h\n");
-printf("semanais dividido pelo número de pacientes atendidos por semana\n\n");
+printf("e que cada dose tem tempo médio de preparo de 10 min.");
 
 AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
 N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = (8 * 5) / sum(N);
+#t = (8 * 5) / sum(N);
+t = 10 / 60;
 tu = 0.0;
 
 wfp = [1 1 1]; T = 1/5; d = 1.98; doseLimite = 100;
@@ -304,9 +305,6 @@ printf("\n");
 
 printLatex("tabela_dados_administracao.tex");
 ##########################################################################
-
-
-
 
 
 
@@ -477,7 +475,7 @@ printf("Corredor de Saída para Área Interna do Hospital:\n\n");
 
 AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
 N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 10 / 60;
+t = 2 / 60;
 tu = 0;
 
 wfp = [1 1 1]; T = 1/8; d = 3.10; doseLimite = 20;
@@ -509,7 +507,7 @@ dadosParaImpressao = [];
 printf("Vestiário Ergometria:\n\n");
 
 AmCi = [30 0 0 0 0 0]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
+N = [NumeroPacientesTc99m 0 0 0 0 0];
 t = 10 / 60;
 tu = 0;
 
