@@ -1,6 +1,6 @@
 #       Autor: Sandro Roger Boschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualizacao: 29 de janeiro de 2018 às 13h58min
+# Atualizacao: 29 de janeiro de 2018 às 14h54min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -22,7 +22,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 29 de janeiro de 2018 às 13h58min\n\n");
+printf("Cálculos realizados em 29 de janeiro de 2018 às 14h54min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -217,6 +217,49 @@ printLatex("tabela_dados_ergometria.tex");
 ##########################################################################
 
 
+wfp = [];
+dadosParaImpressao = [];
+
+##########################################################################
+printf("Administração de Radiofármacos:\n\n");
+printf("Suposicao de que cada administração tem duração média de 10 minutos\n\n");
+
+AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+N = [NumeroPacientesTc99m 10 5 4 2 1];
+t = 10 / 60;
+tu = 0.0;
+
+#largura da sala = 3.21 m, espessura parede corredor = 0.10 m
+wfp = [1 1 1]; T = 1/5; d = (3.21 / 2) + 0.10 + 0.30; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+#altura 1.81 m e espessura de 0.10 m
+wfp = [2 1 2]; T = 1/5; d = (1.81 / 2) + 0.10 + 0.30; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+#largura da sala = 3.21 m, espessura parede corredor = 0.25 m
+wfp = [3 1 3]; T = 1/40; d = (3.21 / 2) + 0.25 + 0.30; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+#altura 1.81 m e espessura de 0.10 m
+wfp = [4 1 4]; T = 1/5; d = (1.81 / 2) + 0.10 + 0.30; doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Piso
+wfp = [5 1 5]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Teto
+wfp = [6 1 6]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("\n");
+
+printLatex("tabela_dados_administracao.tex");
+##########################################################################
+
+
+
 
 wfp = [];
 dadosParaImpressao = [];
@@ -224,28 +267,31 @@ dadosParaImpressao = [];
 ##########################################################################
 printf("Laboratório:\n\n");
 
-printf("Admite-se que todas as fontes estão blindadas a não ser durante\n");
-printf("e que cada dose tem tempo médio de preparo de 10 min.");
+printf("Admite-se que todas as fontes estão blindadas a nao ser durante\n");
+printf("o preparo de cada dose (e eluições e marcações) e que cada dose\n");
+printf("tem tempo médio de preparo de 10 min.\n");
 
 AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
 N = [NumeroPacientesTc99m 10 5 4 2 1];
-#t = (8 * 5) / sum(N);
 t = 10 / 60;
 tu = 0.0;
 
-wfp = [1 1 1]; T = 1/5; d = 1.98; doseLimite = 100;
+
+#altura 3.21 m e espessura de 0.10 m
+wfp = [1 1 1]; T = 1/5; d = (3.21 / 2) + 0.10 + 0.30; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1/5; d = 2.12; doseLimite = 100;
+#altura da sala = 2.93 m, espessura parede corredor = 0.10 m
+# mas considerando que a dose sendo preparada está a 30 cm
+wfp = [2 1 2]; T = 1/5; d = 0.3 + 0.10 + 0.30; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1; d = 1.64; doseLimite = 100;
+#altura 3.21 m e espessura de 0.25 m
+wfp = [3 1 3]; T = 1/40; d = (3.21 / 2) + 0.25 + 0.30; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [4 1 4]; T = 1/40; d = 2.31; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [5 1 5]; T = 1/5; d = 1.93; doseLimite = 100;
+#devido ao posicionamento do rejeito, consideraremos 0.30 cm
+wfp = [4 1 4]; T = 1/5; d = 0.30 + 0.10 + 0.30; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
@@ -259,51 +305,6 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 printf("\n");
 
 printLatex("tabela_dados_laboratorio.tex");
-##########################################################################
-
-
-wfp = [];
-dadosParaImpressao = [];
-
-##########################################################################
-printf("Administração de Radiofármacos:\n\n");
-
-# Consideracao de que apenas fontes de Tc-99m com dose tipica de 30 mCi
-# ficam expostas por um periodo aproximado do procedimento de 30 minutos
-
-printf("Suposicao de que cada administração tem duração média de 10 minutos\n\n");
-
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 10 / 60;
-tu = 0.0;
-
-wfp = [1 1 1]; T = 1/5; d = 1.96; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [2 1 2]; T = 1/5; d = 1.41; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [3 1 3]; T = 1/40; d = 2.41; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [4 1 4]; T = 1/5; d = 1.44; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [5 1 5]; T = 1/5; d = 2.06; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Piso
-wfp = [6 1 5]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Teto
-wfp = [7 1 5]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-
-printLatex("tabela_dados_administracao.tex");
 ##########################################################################
 
 
