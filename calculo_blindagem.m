@@ -1,6 +1,6 @@
 #       Autor: Sandro Roger Boschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualizacao: 29 de janeiro de 2018 às 14h54min
+# Atualizacao: 06 de fevereiro de 2018 às 08h59min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -22,7 +22,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 29 de janeiro de 2018 às 14h54min\n\n");
+printf("Cálculos realizados em 06 de fevereiro de 2018 às 08h59min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -188,20 +188,25 @@ N = [NumeroPacientesTc99m 0 0 0 0 0];
 t = 30 / 60;
 tu = 0.0;
 
-wfp = [1 1 1]; T = 1/5; d = 2.0; doseLimite = 100;
+#wfp = [1 1 1]; T = 1/5; d = 2.0; doseLimite = 100;
+wfp = [1 1 1]; T = 1/5; d = 0.7; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1; d = 1.8; doseLimite = 20;
+#wfp = [2 1 2]; T = 1; d = 1.8; doseLimite = 20;
+wfp = [2 1 2]; T = 1; d = 0.7; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1/40; d = 2.21; doseLimite = 20;
+#wfp = [3 1 3]; T = 1/40; d = 2.21; doseLimite = 20;
+wfp = [3 1 3]; T = 1/40; d = 0.9; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [4 1 4]; T = 1/5; d = 2.2; doseLimite = 100;
+#wfp = [4 1 4]; T = 1/5; d = 2.2; doseLimite = 100;
+wfp = [4 1 4]; T = 1/5; d = 0.7; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [5 1 5]; T = 1/5; d = 2.24; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#Aqui seria a porta mas que agora é o mesmo que o ponto 1
+#wfp = [5 1 5]; T = 1/5; d = 2.24; doseLimite = 100;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
 wfp = [6 1 5]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
