@@ -1,6 +1,6 @@
 #       Autor: Sandro Roger Boschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualizacao: 06 de fevereiro de 2018 às 22h30min
+# Atualizacao: 19 de fevereiro de 2018 às 11h36min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -22,7 +22,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 06 de fevereiro de 2018 às 22h30min\n\n");
+printf("Cálculos realizados em 17 de fevereiro de 2018 às 11h50min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -172,13 +172,32 @@ endfunction
 ##########################################################################
 
 
+
+
+##########################################################################
+# Algumas distâncias existentes na planta
+peDireitoSMN = 3.4;
+peDireitoAndarSuperior = 3.4;
+peDireitoAndarInferior = 2.9
+espessuraLaje = 0.09;
+
+# distância do paciente (1.5 m do chão) a 30 cm abaixo da laje inferior
+dPacAlvoAndarInferior = 1.5 + espessuraLaje + 0.3; # exceção sala de rejeitos
+dPacAlvoAndarSuperior = peDireitoSMN - 1.5 + espessuraLaje + 0.3;
+
+# distância conservadora de 30 cm cada lado mais 10 cm de espessura = 0.7 m
+##########################################################################
+
+
 printf("W significa Parede ou Porta. F, fonte e P, ponto de interesse.\n\n\n");
+
+
 
 ##########################################################################
 printf("Ergometria:\n\n");
 
-# Consideracao de que apenas fontes de Tc-99m com dose tipica de 30 mCi
-# ficam expostas por um periodo aproximado do procedimento de 30 minutos
+# Consideração de que apenas fontes de Tc-99m com dose típica de 30 mCi
+# ficam expostas por um período aproximado do procedimento de 30 minutos.
 
 printf("Suposição de que essa sala é usada apenas para pacientes com Tc-99m\n\n");
 
@@ -188,32 +207,24 @@ N = [NumeroPacientesTc99m 0 0 0 0 0];
 t = 30 / 60;
 tu = 0.0;
 
-#wfp = [1 1 1]; T = 1/5; d = 2.0; doseLimite = 100;
 wfp = [1 1 1]; T = 1/5; d = 0.7; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-#wfp = [2 1 2]; T = 1; d = 1.8; doseLimite = 20;
 wfp = [2 1 2]; T = 1; d = 0.7; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-#wfp = [3 1 3]; T = 1/40; d = 2.21; doseLimite = 20;
 wfp = [3 1 3]; T = 1/40; d = 0.9; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-#wfp = [4 1 4]; T = 1/5; d = 2.2; doseLimite = 100;
 wfp = [4 1 4]; T = 1/5; d = 0.7; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-#Aqui seria a porta mas que agora é o mesmo que o ponto 1
-#wfp = [5 1 5]; T = 1/5; d = 2.24; doseLimite = 100;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
 # Piso
-wfp = [6 1 5]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [5 1 5]; T = 1/5; d = dPacAlvoAndarInferior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [7 1 5]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [6 1 6]; T = 1; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
@@ -234,28 +245,24 @@ N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 10 / 60;
 tu = 0.0;
 
-#largura da sala = 3.21 m, espessura parede corredor = 0.10 m
-wfp = [1 1 1]; T = 1/5; d = (3.21 / 2) + 0.10 + 0.30; doseLimite = 100;
+wfp = [1 1 1]; T = 1/5; d = 0.7; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-#altura 1.81 m e espessura de 0.10 m
-wfp = [2 1 2]; T = 1/5; d = (1.81 / 2) + 0.10 + 0.30; doseLimite = 100;
+wfp = [2 1 2]; T = 1/5; d = 0.7; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-#largura da sala = 3.21 m, espessura parede corredor = 0.25 m
-wfp = [3 1 3]; T = 1/40; d = (3.21 / 2) + 0.25 + 0.30; doseLimite = 20;
+wfp = [3 1 3]; T = 1/40; d = 0.9; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-#altura 1.81 m e espessura de 0.10 m
-wfp = [4 1 4]; T = 1/5; d = (1.81 / 2) + 0.10 + 0.30; doseLimite = 100;
+wfp = [4 1 4]; T = 1/5; d = 0.7; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [5 1 5]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [5 1 5]; T = 1/5; d = dPacAlvoAndarInferior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [6 1 6]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [6 1 6]; T = 1; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
@@ -273,37 +280,32 @@ dadosParaImpressao = [];
 printf("Laboratório:\n\n");
 
 #----------------------------------------------------------------
-printf("Admite-se que todas as fontes estão blindadas a nao ser durante\n");
+printf("Admite-se que todas as fontes estão blindadas a não ser durante\n");
 printf("o preparo de cada dose (e eluições e marcações) e que cada dose\n");
-printf("tem tempo médio de preparo de 10 min.\n");
+printf("permanece típica permanece não blindada por todo o tempo de atividade.\n");
+printf("do serviço de medicina nuclear, ou seja, 40h/sem.\n");
 
-#AmCi = [1500 0 25 20 20 50];
-AmCi = [30 30 5 5 10 50];
-#AmCi = [30 0 5 5 10 50];
+#AmCi = [1500 0 25 20 20 50]; # sem iodo:
+#AmCi = [30 0 5 5 10 50];     # sem iodo
+AmCi = [30 30 5 5 10 50];     # com iodo: solicitação do SPR e RT
 A = AmCi .* 37;
-N = [1 1 1 1 1 1]; #N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 8*5; #10 / 60;
+N = [1 1 1 1 1 1]; # uma dose típica de cada radionuclídeo
+t = 8*5;           # o tempo todo durante 40h por semana
 tu = 0.0;
 #----------------------------------------------------------------
 
-#altura 3.21 m e espessura de 0.10 m
-#wfp = [1 1 1]; T = 1/5; d = (3.21 / 2) + 0.10 + 0.30; doseLimite = 100;
 wfp = [1 1 1]; T = 1/5; d = 0.70; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-#altura da sala = 2.93 m, espessura parede corredor = 0.10 m
-# mas considerando que a dose sendo preparada está a 30 cm
-#wfp = [2 1 2]; T = 1/5; d = 0.3 + 0.10 + 0.30; doseLimite = 100;
 wfp = [2 1 2]; T = 1/5; d = 0.70; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-#altura 3.21 m e espessura de 0.25 m
-#wfp = [3 1 3]; T = 1/40; d = (3.21 / 2) + 0.25 + 0.30; doseLimite = 20;
 wfp = [3 1 3]; T = 1/40; d = 0.90; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-#devido ao posicionamento do rejeito, consideraremos 0.30 cm
-#wfp = [4 1 4]; T = 1/5; d = 0.30 + 0.10 + 0.30; doseLimite = 100;
+# Devido ao posicionamento do rejeito, consideraremos 0.30 cm
+# Os rejeitos estão bem blindados e sobra apenas o que se
+# considerou anteriormente, ou seja, doses típicas sem blindagens.
 wfp = [4 1 4]; T = 1/5; d = 0.70; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
@@ -318,11 +320,11 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 #--------------------------------------------------
 
 # Piso
-wfp = [6 1 6]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [6 1 6]; T = 1/5; d = dPacAlvoAndarInferior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [7 1 7]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [7 1 7]; T = 1; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
