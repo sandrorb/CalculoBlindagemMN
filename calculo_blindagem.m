@@ -1,6 +1,6 @@
 #       Autor: Sandro Roger Boschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualizacao: 19 de fevereiro de 2018 às 11h48min
+# Atualizacao: 19 de fevereiro de 2018 às 12h12min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -22,7 +22,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 19 de fevereiro de 2018 às 11h48min\n\n");
+printf("Cálculos realizados em 19 de fevereiro de 2018 às 12h12min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -349,7 +349,7 @@ tu = 90 / 60;
 wfp = [1 1 1]; T = 1/5; d = 1.65; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1/5; d = 3.10; doseLimite = 100;
+wfp = [2 1 2]; T = 1; d = 3.10; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 wfp = [3 1 3]; T = 1/5; d = 2.35; doseLimite = 100;
@@ -389,24 +389,24 @@ N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 5 / 60;
 tu = 0;
 
-wfp = [1 1 1]; T = 1/20; d = 0.90; doseLimite = 20;
+wfp = [1 1 1]; T = 1/20; d = 1.00; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1/5; d = 1.41; doseLimite = 20;
+wfp = [2 1 2]; T = 1/5; d = 1.32; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1/5; d = 1.40; doseLimite = 100;
+wfp = [3 1 3]; T = 1/5; d = 1.30; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [4 1 4]; T = 1; d = 0.85; doseLimite = 100;
+wfp = [4 1 4]; T = 1; d = 0.77; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [5 1 5]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [5 1 5]; T = 1/5; d = dPacAlvoAndarInferior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [6 1 5]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [6 1 5]; T = 1; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
@@ -427,24 +427,24 @@ N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 5 / 60;
 tu = 0;
 
-wfp = [1 1 1]; T = 1/8; d = 1.48; doseLimite = 20;
+wfp = [1 1 1]; T = 1/8; d = 1.05; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1/5; d = 1.65; doseLimite = 20;
+wfp = [2 1 2]; T = 1/5; d = 1.40; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1/20; d = 0.90; doseLimite = 20;
+wfp = [3 1 3]; T = 1/20; d = 1.09; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [4 1 4]; T = 1; d = 0.85; doseLimite = 100;
+wfp = [4 1 4]; T = 1; d = 0.82; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [5 1 5]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [5 1 5]; T = 1/5; d = dPacAlvoAndarInferior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [6 1 5]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [6 1 5]; T = 1; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
@@ -464,30 +464,30 @@ N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 90 / 60;
 tu = 0;
 
-wfp = [1 1 1]; T = 1/8; d = 1.80; doseLimite = 20;
+wfp = [1 1 1]; T = 1/8; d = 1.31; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1/8; d = 1.85; doseLimite = 100;
+wfp = [2 1 2]; T = 1/8; d = 1.20; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1/8; d = 3.80; doseLimite = 100;
+wfp = [3 1 3]; T = 1/8; d = 2.71; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [4 1 4]; T = 1/20; d = 3.10; doseLimite = 100;
+wfp = [4 1 4]; T = 1/20; d = 2.06; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [5 1 5]; T = 1/20; d = 2.5; doseLimite = 20;
+wfp = [5 1 5]; T = 1/20; d = 2.02; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [6 1 6]; T = 1/20; d = 2.5; doseLimite = 20;
+wfp = [6 1 6]; T = 1/20; d = 2.01; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [7 1 7]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [7 1 7]; T = 1/5; d = dPacAlvoAndarInferior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [8 1 8]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [8 1 8]; T = 1; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
@@ -507,21 +507,24 @@ N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 2 / 60;
 tu = 0;
 
-wfp = [1 1 1]; T = 1/8; d = 3.10; doseLimite = 20;
+wfp = [1 1 1]; T = 1/8; d = 1.71; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1; d = 1.30; doseLimite = 20;
+wfp = [2 1 2]; T = 1; d = 1.04; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1/5; d = 1.07; doseLimite = 20;
+wfp = [3 1 3]; T = 1/5; d = 1.11; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [4 1 4]; T = 1/5; d = 1.11; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [4 1 7]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [4 1 7]; T = 1/5; d = dPacAlvoAndarInferior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [5 1 8]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [5 1 8]; T = 1; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
@@ -540,30 +543,52 @@ N = [NumeroPacientesTc99m 0 0 0 0 0];
 t = 10 / 60;
 tu = 0;
 
-wfp = [1 1 1]; T = 1; d = 0.80; doseLimite = 20;
+wfp = [1 1 1]; T = 1; d = 1.00; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1; d = 0.90; doseLimite = 20;
+wfp = [2 1 2]; T = 1/20; d = 0.80; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1/5; d = 1.20; doseLimite = 100;
+wfp = [3 1 3]; T = 1/5; d = 1.10; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [4 1 4]; T = 1/5; d = 0.85; doseLimite = 100;
+wfp = [4 1 4]; T = 1/5; d = 1.11; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [5 1 7]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [5 1 7]; T = 1/5; d = dPacAlvoAndarInferior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [6 1 8]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [6 1 8]; T = 1; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
 printLatex("tabela_dados_vestiario_ergo.tex");
 ##########################################################################
+
+
+wfp = [];
+dadosParaImpressao = [];
+
+##########################################################################
+printf("Porta de Entrada:\n\n");
+
+AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+N = [NumeroPacientesTc99m 10 5 4 2 1];
+t = 2 / 60;
+tu = 0;
+
+wfp = [1 1 1]; T = 1/5; d = 1.10; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("\n");
+
+printLatex("tabela_dados_porta_de_entrada.tex");
+##########################################################################
+
+
 
 #clear wfp dadosParaImpressao;
 clear -all;
