@@ -1,6 +1,6 @@
 #       Autor: Sandro Roger Boschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualizacao: 19 de fevereiro de 2018 às 11h36min
+# Atualizacao: 19 de fevereiro de 2018 às 11h48min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -22,7 +22,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 17 de fevereiro de 2018 às 11h50min\n\n");
+printf("Cálculos realizados em 19 de fevereiro de 2018 às 11h48min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -346,27 +346,30 @@ N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 30 / 60;
 tu = 90 / 60;
 
-wfp = [1 1 1]; T = 1/5; d = 2.81; doseLimite = 100;
+wfp = [1 1 1]; T = 1/5; d = 1.65; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1/5; d = 2.90; doseLimite = 100;
+wfp = [2 1 2]; T = 1/5; d = 3.10; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1/5; d = 2.40; doseLimite = 100;
+wfp = [3 1 3]; T = 1/5; d = 2.35; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [4 1 4]; T = 1/40; d = 2.33; doseLimite = 20;
+wfp = [4 1 4]; T = 1/5; d = 2.30; doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [5 1 5]; T = 1/40; d = 1.8; doseLimite = 20;
+wfp = [5 1 5]; T = 1/40; d = 2.11; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [6 1 6]; T = 1/40; d = 1.70; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [6 1 5]; T = 1/5; d = (1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [7 1 7]; T = 1/5; d = dPacAlvoAndarInferior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [7 1 5]; T = 1; d = (3.4 - 1.5 + 0.09 + 0.3); doseLimite = 20;
+wfp = [8 1 8]; T = 1; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
