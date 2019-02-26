@@ -1,6 +1,6 @@
 #       Autor: Sandro Roger Boschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualizacao: 19 de fevereiro de 2018 às 13h28min
+# Atualizacao: 26 de fevereiro de 2019 às 16h49min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -22,7 +22,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 19 de fevereiro de 2018 às 13h28min\n\n");
+printf("Cálculos realizados em 26 de fevereiro de 2019 às 16h49min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -194,6 +194,57 @@ fatorOcupAndarSup = 1;
 printf("W significa Parede ou Porta. F, fonte e P, ponto de interesse.\n\n\n");
 
 
+function d = InToM(in)
+  escala = 1/50;
+  d = (in * 2.54 / escala) / 100
+endfunction
+
+
+##########################################################################
+printf("Sala de Exame:\n\n");
+
+AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+N = [NumeroPacientesTc99m 10 5 4 2 1];
+t = 30 / 60;
+tu = 90 / 60;
+
+wfp = [1 1 1]; T = 1/5; d = InToM(2.42); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [2 1 2]; T = 1/5; d = InToM(2.17); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [3 1 3]; T = 1; d = InToM(2.15); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [4 1 4]; T = 1/5; d = InToM(2.17); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [5 1 5]; T = 1; d = InToM(2.0); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [6 1 6]; T = 1/5; d = InToM(2.53); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Piso
+#wfp = [7 1 7]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Teto
+#wfp = [8 1 8]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("\n");
+
+printLatex("tabela_dados_exame.tex");
+##########################################################################
+
+
+wfp = [];
+dadosParaImpressao = [];
+
+
+
 
 ##########################################################################
 printf("Ergometria:\n\n");
@@ -340,48 +391,7 @@ printLatex("tabela_dados_laboratorio.tex");
 wfp = [];
 dadosParaImpressao = [];
 
-##########################################################################
-printf("Sala de Exame:\n\n");
 
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 30 / 60;
-tu = 90 / 60;
-
-wfp = [1 1 1]; T = 1/5; d = 1.65; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [2 1 2]; T = 1; d = 3.10; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [3 1 3]; T = 1/5; d = 2.35; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [4 1 4]; T = 1/5; d = 2.30; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [5 1 5]; T = 1/40; d = 2.11; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [6 1 6]; T = 1/40; d = 1.70; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Piso
-wfp = [7 1 7]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Teto
-wfp = [8 1 8]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-
-printLatex("tabela_dados_exame.tex");
-##########################################################################
-
-
-wfp = [];
-dadosParaImpressao = [];
 
 ##########################################################################
 printf("Sanitário Exclusivo de Pacientes Injetados (ao lado de I. S. Func.):\n\n");
