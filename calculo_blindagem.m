@@ -176,17 +176,16 @@ endfunction
 
 ##########################################################################
 # Algumas distâncias existentes na planta
-peDireitoSMN = 3.4;
-peDireitoAndarSuperior = 3.4;
-peDireitoAndarInferior = 2.9
+peDireitoSMN = 2.95;
+peDireitoAndarSuperior = 2.95;
+peDireitoAndarInferior = 2.95;
 espessuraLaje = 0.09;
 
 # distância do paciente (1.5 m do chão) a 30 cm abaixo da laje inferior
-dPacAlvoAndarInferior = 1.5 + espessuraLaje + 0.3; # exceção sala de rejeitos
+dPacAlvoAndarInferior = 1.5 + espessuraLaje + 0.3;
 dPacAlvoAndarSuperior = peDireitoSMN - 1.5 + espessuraLaje + 0.3;
 
-# distância conservadora de 30 cm cada lado mais 10 cm de espessura = 0.7 m
-fatorOcupAndarInf = 1/5;
+fatorOcupAndarInf = 1;
 fatorOcupAndarSup = 1;
 ##########################################################################
 
@@ -196,7 +195,7 @@ printf("W significa Parede ou Porta. F, fonte e P, ponto de interesse.\n\n\n");
 
 function d = mm2m(mm)
   escala = 1/50;
-  d = mm / escala / 1000
+  d = (mm / 1000) / escala
 endfunction
 
 
@@ -234,12 +233,12 @@ wfp = [6 1 6]; T = 1/5; d = mm2m(66.19); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-#wfp = [7 1 7]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [7 1 7]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-#wfp = [8 1 8]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [8 1 8]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
@@ -272,12 +271,12 @@ wfp = [4 1 4]; T = 1; d = mm2m(25.17); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-#wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-#wfp = [6 1 5]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [6 1 5]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
@@ -317,12 +316,12 @@ wfp = [6 1 6]; T = 1/20; d = mm2m(64.20); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-#wfp = [7 1 7]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [7 1 7]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-#wfp = [8 1 8]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [8 1 8]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
@@ -355,12 +354,12 @@ wfp = [4 1 4]; T = 1/5; d = mm2m(34.44); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-#wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-#wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
@@ -428,12 +427,12 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 #--------------------------------------------------
 
 # Piso
-#wfp = [6 1 6]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [8 1 8]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-#wfp = [7 1 7]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [8 1 9]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
@@ -482,12 +481,12 @@ wfp = [7 1 7]; T = 1/5; d = mm2m(50.94); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-#wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [8 1 8]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-#wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [9 1 9]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
@@ -522,12 +521,12 @@ wfp = [4 1 4]; T = 1; d = mm2m(17.80); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-#wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-#wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
