@@ -1,6 +1,6 @@
 #       Autor: Sandro Roger Boschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualizacao: 26 de fevereiro de 2019 às 16h49min
+# Atualizacao: 27 de fevereiro de 2019 às 16h23min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -22,7 +22,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 26 de fevereiro de 2019 às 16h49min\n\n");
+printf("Cálculos realizados em 27 de fevereiro de 2019 às 16h23min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -195,7 +195,7 @@ printf("W significa Parede ou Porta. F, fonte e P, ponto de interesse.\n\n\n");
 
 function d = mm2m(mm)
   escala = 1/50;
-  d = (mm / 1000) / escala
+  d = (mm / 1000) / escala;
 endfunction
 
 
@@ -375,17 +375,15 @@ dadosParaImpressao = [];
 printf("Laboratório:\n\n");
 
 #----------------------------------------------------------------
-printf("Admite-se que todas as fontes estão blindadas a não ser durante\n");
-printf("o preparo de cada dose (e eluições e marcações) e que cada dose\n");
-printf("típica permanece não blindada por todo o tempo de atividade.\n");
-printf("do serviço de medicina nuclear, ou seja, 40h/sem.\n");
+printf("Admite-se que todas as fontes estão blindadas, a não ser durante\n");
+printf("o preparo de cada dose (eluições e marcações), e que cada dose\n");
+printf("típica permanece não blindada por todo o tempo médio de 10 minutos.\n");
+printf("São preparadas tantas doses quantos pacientes atendidos semanalmente.\n");
 
-#AmCi = [1500 0 25 20 20 50]; # sem iodo:
-#AmCi = [30 0 5 5 10 50];     # sem iodo
 AmCi = [30 30 5 5 10 50];     # com iodo: solicitação do SPR e RT
 A = AmCi .* 37;
-N = [1 1 1 1 1 1]; # uma dose típica de cada radionuclídeo
-t = 8*5;           # o tempo todo durante 40h por semana
+N = [NumeroPacientesTc99m 10 5 4 2 1]; # uma dose típica de cada radionuclídeo
+t = 10/60;
 tu = 0.0;
 #----------------------------------------------------------------
 
@@ -439,6 +437,49 @@ printf("\n");
 printLatex("tabela_dados_laboratorio.tex");
 ##########################################################################
 
+
+
+wfp = [];
+dadosParaImpressao = [];
+
+##########################################################################
+printf("Sala de Rejeitos:\n\n");
+
+printf("Suposicao de que 10%% de cada dose semanal é descartada e de que são\n");
+printf("armazenadas em blindagens de 5 mm de espessura de chumbo.\n\n");
+
+
+AmCi = 0.1 .* [1000 50 15 20 10 100]; A = AmCi .* 37;
+A = A .* exp(-log(2) * 0.5 ./ csrPb);
+
+N = [1 1 1 1 1 1];
+t = 40;
+tu = 0.0;
+
+wfp = [1 1 1]; T = 1/40; d = mm2m(34.64); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [2 1 2]; T = 1/20; d = mm2m(25.64); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [3 1 3]; T = 1; d = mm2m(39.14); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [4 1 4]; T = 1/8; d = mm2m(29.77); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Piso
+wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Teto
+wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("\n");
+
+printLatex("tabela_dados_rejeitos.tex");
+##########################################################################
 
 
 
