@@ -194,36 +194,43 @@ fatorOcupAndarSup = 1;
 printf("W significa Parede ou Porta. F, fonte e P, ponto de interesse.\n\n\n");
 
 
-function d = InToM(in)
+function d = mm2m(mm)
   escala = 1/50;
-  d = (in * 2.54 / escala) / 100
+  d = mm / escala / 1000
 endfunction
+
+
+
+##########################################################################
+##########################################################################
+##########################################################################
+
 
 
 ##########################################################################
 printf("Sala de Exame:\n\n");
 
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
+AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
 N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 30 / 60;
 tu = 90 / 60;
 
-wfp = [1 1 1]; T = 1/5; d = InToM(2.42); doseLimite = 100;
+wfp = [1 1 1]; T = 1/5; d = mm2m(60.75); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1/5; d = InToM(2.17); doseLimite = 100;
+wfp = [2 1 2]; T = 1/5; d = mm2m(55.25); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1; d = InToM(2.15); doseLimite = 100;
+wfp = [3 1 3]; T = 1; d = mm2m(52.33); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [4 1 4]; T = 1/5; d = InToM(2.17); doseLimite = 20;
+wfp = [4 1 4]; T = 1/5; d = mm2m(56.35); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [5 1 5]; T = 1; d = InToM(2.0); doseLimite = 20;
+wfp = [5 1 5]; T = 1; d = mm2m(254.73); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [6 1 6]; T = 1/5; d = InToM(2.53); doseLimite = 100;
+wfp = [6 1 6]; T = 1/5; d = mm2m(66.19); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
@@ -240,49 +247,86 @@ printLatex("tabela_dados_exame.tex");
 ##########################################################################
 
 
+
 wfp = [];
 dadosParaImpressao = [];
 
-
-
-
 ##########################################################################
-printf("Ergometria:\n\n");
+printf("Sanitário Exclusivo de Pacientes Injetados:\n\n");
 
-# Consideração de que apenas fontes de Tc-99m com dose típica de 30 mCi
-# ficam expostas por um período aproximado do procedimento de 30 minutos.
+AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
+N = [NumeroPacientesTc99m 10 5 4 2 1];
+t = 5 / 60;
+tu = 0;
 
-printf("Suposição de que essa sala é usada apenas para pacientes com Tc-99m\n\n");
-
-AmCi = [30 0 0 0 0 0]; A = AmCi .* 37;
-NumeroPacientesTc99m = 120; # numero super estimado
-N = [NumeroPacientesTc99m 0 0 0 0 0];
-t = 30 / 60;
-tu = 0.0;
-
-wfp = [1 1 1]; T = 1/5; d = 0.7; doseLimite = 100;
+wfp = [1 1 1]; T = 1/40; d = mm2m(33.71); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1; d = 0.7; doseLimite = 20;
+wfp = [2 1 2]; T = 1/5; d = mm2m(24.71); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1/40; d = 0.9; doseLimite = 20;
+wfp = [3 1 3]; T = 1; d = mm2m(36.95); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [4 1 4]; T = 1/5; d = 0.7; doseLimite = 100;
+wfp = [4 1 4]; T = 1; d = mm2m(25.17); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#wfp = [6 1 5]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-printLatex("tabela_dados_ergometria.tex");
+printLatex("tabela_dados_sanitario.tex");
+##########################################################################
+
+
+
+
+wfp = [];
+dadosParaImpressao = [];
+
+##########################################################################
+printf("Sala Exclusiva de Pacientes Injetados:\n\n");
+
+AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
+N = [NumeroPacientesTc99m 10 5 4 2 1];
+t = 90 / 60;
+tu = 0;
+
+wfp = [1 1 1]; T = 1/40; d = mm2m(36.25); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [2 1 2]; T = 1; d = mm2m(62.50); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [3 1 3]; T = 1/5; d = mm2m(56.22); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [4 1 4]; T = 1; d = mm2m(39.86); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [5 1 5]; T = 1; d = mm2m(45.98); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [6 1 6]; T = 1/20; d = mm2m(64.20); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Piso
+#wfp = [7 1 7]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Teto
+#wfp = [8 1 8]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("\n");
+
+printLatex("tabela_dados_espera_injetados.tex");
 ##########################################################################
 
 
@@ -298,31 +342,30 @@ N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 10 / 60;
 tu = 0.0;
 
-wfp = [1 1 1]; T = 1/5; d = 0.7; doseLimite = 100;
+wfp = [1 1 1]; T = 1/40; d = mm2m(37.32); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1/5; d = 0.7; doseLimite = 100;
+wfp = [2 1 2]; T = 1; d = mm2m(38.79); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1/40; d = 0.9; doseLimite = 20;
+wfp = [3 1 3]; T = 1/5; d = mm2m(44.80); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [4 1 4]; T = 1/5; d = 0.7; doseLimite = 100;
+wfp = [4 1 4]; T = 1/5; d = mm2m(34.44); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
 printLatex("tabela_dados_administracao.tex");
 ##########################################################################
-
 
 
 
@@ -335,7 +378,7 @@ printf("Laboratório:\n\n");
 #----------------------------------------------------------------
 printf("Admite-se que todas as fontes estão blindadas a não ser durante\n");
 printf("o preparo de cada dose (e eluições e marcações) e que cada dose\n");
-printf("permanece típica permanece não blindada por todo o tempo de atividade.\n");
+printf("típica permanece não blindada por todo o tempo de atividade.\n");
 printf("do serviço de medicina nuclear, ou seja, 40h/sem.\n");
 
 #AmCi = [1500 0 25 20 20 50]; # sem iodo:
@@ -347,38 +390,50 @@ t = 8*5;           # o tempo todo durante 40h por semana
 tu = 0.0;
 #----------------------------------------------------------------
 
-wfp = [1 1 1]; T = 1/5; d = 0.70; doseLimite = 100;
+wfp = [1 1 1]; T = 1/40; d = mm2m(35.68); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1/5; d = 0.70; doseLimite = 100;
+wfp = [2 1 2]; T = 1/20; d = mm2m(34.06); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1/40; d = 0.90; doseLimite = 20;
+wfp = [3 1 3]; T = 1; d = mm2m(47.20); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [4 1 4]; T = 1; d = mm2m(55.44); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [5 1 5]; T = 1; d = mm2m(68.35); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [6 1 6]; T = 1/5; d = mm2m(65.97); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [7 1 7]; T = 1; d = mm2m(29.53); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Devido ao posicionamento do rejeito, consideraremos 0.30 cm
 # Os rejeitos estão bem blindados e sobra apenas o que se
 # considerou anteriormente, ou seja, doses típicas sem blindagens.
-wfp = [4 1 4]; T = 1/5; d = 0.70; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#wfp = [4 1 4]; T = 1/5; d = 0.70; doseLimite = 100;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 #--------------------------------------------------
 #AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
 #N = [1 1 1 1 1 1]; #[NumeroPacientesTc99m 10 5 4 2 1];
 #t = 8 * 5;
 #tu = 0.0;
-printf("Ponto especial com considerações especial para proteção da câmara\n");
-wfp = [5 1 5]; T = 1; d = 1.90; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#printf("Ponto especial com considerações especial para proteção da câmara\n");
+#wfp = [5 1 5]; T = 1; d = 1.90; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 #--------------------------------------------------
 
 # Piso
-wfp = [6 1 6]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#wfp = [6 1 6]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [7 1 7]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#wfp = [7 1 7]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
@@ -391,193 +446,52 @@ printLatex("tabela_dados_laboratorio.tex");
 wfp = [];
 dadosParaImpressao = [];
 
-
-
 ##########################################################################
-printf("Sanitário Exclusivo de Pacientes Injetados (ao lado de I. S. Func.):\n\n");
+printf("Ergometria:\n\n");
 
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 5 / 60;
-tu = 0;
+# Consideração de que apenas fontes de Tc-99m com dose típica de 30 mCi
+# ficam expostas por um período aproximado do procedimento de 30 minutos.
 
-wfp = [1 1 1]; T = 1/20; d = 1.00; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [2 1 2]; T = 1/5; d = 1.32; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [3 1 3]; T = 1/20; d = 1.30; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [4 1 4]; T = 1; d = 0.77; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Piso
-wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Teto
-wfp = [6 1 5]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-
-printLatex("tabela_dados_sanitario_esq.tex");
-##########################################################################
-
-
-
-wfp = [];
-dadosParaImpressao = [];
-
-##########################################################################
-printf("Sanitário Exclusivo de Pacientes Injetados (ao lado do corredor):\n\n");
-
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 5 / 60;
-tu = 0;
-
-wfp = [1 1 1]; T = 1/5; d = 1.05; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [2 1 2]; T = 1/5; d = 1.40; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [3 1 3]; T = 1/20; d = 1.09; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [4 1 4]; T = 1; d = 0.82; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Piso
-wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Teto
-wfp = [6 1 5]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-
-printLatex("tabela_dados_sanitario_dir.tex");
-##########################################################################
-
-
-wfp = [];
-dadosParaImpressao = [];
-
-##########################################################################
-printf("Sala Exclusiva de Pacientes Injetados:\n\n");
-
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 90 / 60;
-tu = 0;
-
-wfp = [1 1 1]; T = 1/5; d = 1.31; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [2 1 2]; T = 1/5; d = 1.20; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [3 1 3]; T = 1/8; d = 2.71; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [4 1 4]; T = 1/20; d = 2.06; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [5 1 5]; T = 1/20; d = 2.02; doseLimite = 100;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [6 1 6]; T = 1/20; d = 2.01; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Piso
-wfp = [7 1 7]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Teto
-wfp = [8 1 8]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-
-printLatex("tabela_dados_espera_injetados.tex");
-##########################################################################
-
-
-wfp = [];
-dadosParaImpressao = [];
-
-##########################################################################
-printf("Corredor de Saída para Área Interna do Hospital:\n\n");
-
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 2 / 60;
-tu = 0;
-
-wfp = [1 1 1]; T = 1/8; d = 1.71; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [2 1 2]; T = 1; d = 1.04; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [3 1 3]; T = 1/5; d = 1.11; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-wfp = [4 1 4]; T = 1/5; d = 1.11; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Piso
-wfp = [4 1 7]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-# Teto
-wfp = [5 1 8]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
-
-printf("\n");
-
-printLatex("tabela_dados_corredor.tex");
-##########################################################################
-
-wfp = [];
-dadosParaImpressao = [];
-
-##########################################################################
-printf("Vestiário Ergometria:\n\n");
+printf("Suposição de que essa sala é usada apenas para pacientes com Tc-99m\n\n");
 
 AmCi = [30 0 0 0 0 0]; A = AmCi .* 37;
+NumeroPacientesTc99m = 120; # numero super estimado
 N = [NumeroPacientesTc99m 0 0 0 0 0];
-t = 10 / 60;
-tu = 0;
+t = 30 / 60;
+tu = 0.0;
 
-wfp = [1 1 1]; T = 1; d = 1.00; doseLimite = 20;
+wfp = [1 1 1]; T = 1; d = mm2m(39.72); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [2 1 2]; T = 1/20; d = 0.80; doseLimite = 20;
+wfp = [2 1 2]; T = 1; d = mm2m(32.67); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [3 1 3]; T = 1/5; d = 1.10; doseLimite = 100;
+wfp = [3 1 3]; T = 1; d = mm2m(29.08); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [4 1 4]; T = 1/5; d = 1.11; doseLimite = 100;
+wfp = [4 1 4]; T = 1/5; d = mm2m(43.88); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [5 1 5]; T = 1/5; d = mm2m(56.86); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [6 1 6]; T = 1; d = mm2m(51.63); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [7 1 7]; T = 1/5; d = mm2m(50.94); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [5 1 7]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [6 1 8]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-printLatex("tabela_dados_vestiario_ergo.tex");
+printLatex("tabela_dados_ergometria.tex");
 ##########################################################################
 
 
@@ -585,27 +499,39 @@ wfp = [];
 dadosParaImpressao = [];
 
 ##########################################################################
-printf("Porta de Entrada:\n\n");
+printf("Inalação:\n\n");
 
-AmCi = [30 30 5 5 10 50]; A = AmCi .* 37;
-N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 2 / 60;
-tu = 0;
+printf("Suposição de que essa sala é usada apenas para pacientes com Tc-99m\n\n");
 
-wfp = [1 1 1]; T = 1/5; d = 1.10; doseLimite = 20;
+AmCi = [30 0 0 0 0 0]; A = AmCi .* 37;
+NumeroPacientesTc99m = 20; # numero super estimado
+N = [NumeroPacientesTc99m 0 0 0 0 0];
+t = 30 / 60;
+tu = 0.0;
+
+wfp = [1 1 1]; T = 1/5; d = mm2m(34.94); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [2 1 2]; T = 1/5; d = mm2m(31.03); doseLimite = 100;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [3 1 3]; T = 1; d = mm2m(29.40); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [4 1 4]; T = 1; d = mm2m(17.80); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [2 1 2]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [3 1 3]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
-calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+#wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+#calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-printLatex("tabela_dados_porta_de_entrada.tex");
+printLatex("tabela_dados_inalacao.tex");
 ##########################################################################
 
 
