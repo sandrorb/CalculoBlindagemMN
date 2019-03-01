@@ -1,12 +1,14 @@
 #       Autor: Sandro Roger Boschetti
+#     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
 # Atualizacao: 27 de fevereiro de 2019 às 16h23min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
 
-# Para executar esse código basta fazer um copiar e colar do conteúdo
-# desse arquivo para o site http://octave-online.net
+# Programas em Octave podem ser executados online em http://octave-online.net
+# Para executar este programa sugere-se utilizar os programas gratuitos que
+# podem ser encontrados em https://www.gnu.org/software/octave
 
 # Esse programa encontra-se por tempo indeterminado em:
 # https://github.com/sandrorb/CalculoBlindagemMN
@@ -74,12 +76,13 @@ mu = log(2) ./ csr;
 
 
 
-##########################################################################
-# x eh a espessura de Pb, y eh a de Barita e z a de Concreto
+########################################################################
+# As variáveis x, y e z são as espessuras de Pb, Barita e
+# Concreto respectivamente.
 function [x, y, z] = calculaEspessuras(mu, doseSemBlindagem, doseLimite)
 
 	delta = 0.001;
-	
+  
 	x = 0.0;
 	doseComBlindagem = doseSemBlindagem .* exp (- mu(1,:) * x);
 	doseInicial = sum(doseComBlindagem);
@@ -140,7 +143,8 @@ function calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite)
 	printf("Blindagem (cm de Pb, barita e concreto): %6.3f, %6.3f, %6.3f\n\n", x, y, z);
 	
 	aux = wfp;
-	wfp = [wfp doseLimite sum(doseSemBlindagem) x y z];
+	#wfp = [wfp doseLimite sum(doseSemBlindagem) x y z];
+  wfp = [wfp doseLimite sum(doseSemBlindagem) x y z t tu T d];
  	dadosParaImpressao = vertcat(dadosParaImpressao, wfp);
  	wfp = aux;
 endfunction
@@ -161,10 +165,10 @@ function printLatex(fn)
 	  fprintf(fid, "%3d & %10.2f & ", dadosParaImpressao(i,3), dadosParaImpressao(i,4));
 	  fprintf(fid, "%10.2f & %10.3f & ", dadosParaImpressao(i,5), dadosParaImpressao(i,6));
 	  if (dadosParaImpressao(i,7) > 2.5)	
-      	fprintf(fid, "\\red{%10.3f} & ", dadosParaImpressao(i,7));
-      else
-    	  fprintf(fid, "%10.3f & ", dadosParaImpressao(i,7));
-      endif
+      fprintf(fid, "\\red{%10.3f} & ", dadosParaImpressao(i,7));
+    else
+      fprintf(fid, "%10.3f & ", dadosParaImpressao(i,7));
+    endif
 	  fprintf(fid, "%10.3f \\\\ \n", dadosParaImpressao(i,8));
   endfor
   fclose(fid);
@@ -172,10 +176,57 @@ endfunction
 ##########################################################################
 
 
+##########################################################################
+# Saida de dados para tabela LaTeX
+# Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
+function printLatex2(fn)
+  global dadosParaImpressao;
+  fid = fopen(fn, "w");
+
+# Preparação da primeira linha do cobeçalho
+  fprintf(fid, "\\\\ \\cline{8-12}\n");
+  fprintf(fid, "\\multicolumn{7}{c|}{} & \n");
+  fprintf(fid, "\\multicolumn{2}{c|}{\\textbf{Doses em $\\mu$Sv}}  & \n"); 
+  fprintf(fid, "\\multicolumn{3}{c|}{\\textbf{Espessuras em cm}} \\\\ \\hline \n");
+
+# Preparação da segunda linha do cabeçalho
+  fprintf(fid, "\\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
+  fprintf(fid, "\\textbf{t} & \\textbf{t$_u$} & \\textbf{T} & \\textbf{d (m)} & ");
+  fprintf(fid, "\\textbf{Limite} & \\textbf{Dose} & \\textbf{Pb} & ");
+  fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto} \\\\ \\hline \n");
+  
+  for i = 1:rows(dadosParaImpressao)
+	  fprintf(fid,    "%3d & ", dadosParaImpressao(i,1)); # w (parede)
+    fprintf(fid,    "%3d & ", dadosParaImpressao(i,2)); # f (fonte)
+	  fprintf(fid,    "%3d & ", dadosParaImpressao(i,3)); # p (ponto de interesse)
+    
+    fprintf(fid, "%10.1f & ", dadosParaImpressao(i,9));  # t (tempo de permanência
+    fprintf(fid, "%10.1f & ", dadosParaImpressao(i,10)); # tu (tempo de uptake
+    fprintf(fid, "%10.2f & ", dadosParaImpressao(i,11)); # T (fator de ocupação)
+    fprintf(fid, "%10.3f & ", dadosParaImpressao(i,12)); # d (distância e m)
+    
+    fprintf(fid, "%10.2f & ", dadosParaImpressao(i,4)); # dose limite
+	  fprintf(fid, "%10.2f & ", dadosParaImpressao(i,5)); # dose sem blindagem
+    
+    fprintf(fid, "%10.3f & ", dadosParaImpressao(i,6)); # x espessura de Pb
+
+	  if (dadosParaImpressao(i,7) > 2.5)	
+      fprintf(fid, "\\red{%10.3f} & ", dadosParaImpressao(i,7));
+    else
+      fprintf(fid, "%10.3f & ", dadosParaImpressao(i,7));
+    endif
+	  fprintf(fid, "%10.3f \\\\ \n", dadosParaImpressao(i,8));
+  endfor
+  fclose(fid);
+endfunction
+##########################################################################
 
 
 ##########################################################################
-# Algumas distâncias existentes na planta
+# Os dados abaixo são valores padrão mas que podem ser modificados em
+# outras partes do programa para atender aos requisitos de cada área do SMN.
+
+# Algumas distâncias existentes na planta em metros
 peDireitoSMN = 2.95;
 peDireitoAndarSuperior = 2.95;
 peDireitoAndarInferior = 2.95;
@@ -183,6 +234,8 @@ espessuraLaje = 0.09;
 
 # distância do paciente (1.5 m do chão) a 30 cm abaixo da laje inferior
 dPacAlvoAndarInferior = 1.5 + espessuraLaje + 0.3;
+
+# distância do paciente a 30 cm da superfície da laje superior
 dPacAlvoAndarSuperior = peDireitoSMN - 1.5 + espessuraLaje + 0.3;
 
 fatorOcupAndarInf = 1;
@@ -193,6 +246,8 @@ fatorOcupAndarSup = 1;
 printf("W significa Parede ou Porta. F, fonte e P, ponto de interesse.\n\n\n");
 
 
+# Esta auxiliar para calular a real distância em metros a partir do
+# valor obtido na planta em PDF em milímetro reduzido pela escala 1/50.
 function d = mm2m(mm)
   escala = 1/50;
   d = (mm / 1000) / escala;
@@ -200,10 +255,12 @@ endfunction
 
 
 
-##########################################################################
-##########################################################################
-##########################################################################
 
+##########################################################################
+##########################################################################
+#                  AQUI INICIAM-SE DE FATO OS CÁLCULOS
+##########################################################################
+##########################################################################
 
 
 ##########################################################################
@@ -226,7 +283,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 wfp = [4 1 4]; T = 1/5; d = mm2m(56.35); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
-wfp = [5 1 5]; T = 1; d = mm2m(254.73); doseLimite = 20;
+wfp = [5 1 5]; T = 1; d = mm2m(54.73); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 wfp = [6 1 6]; T = 1/5; d = mm2m(66.19); doseLimite = 100;
@@ -242,8 +299,10 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-printLatex("tabela_dados_exame.tex");
+#printLatex("tabela_dados_exame.tex");
+printLatex2("tabela_dados_exame.tex");
 ##########################################################################
+
 
 
 
@@ -280,7 +339,8 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-printLatex("tabela_dados_sanitario.tex");
+#printLatex("tabela_dados_sanitario.tex");
+printLatex2("tabela_dados_sanitario.tex");
 ##########################################################################
 
 
@@ -325,7 +385,8 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-printLatex("tabela_dados_espera_injetados.tex");
+#printLatex("tabela_dados_espera_injetados.tex");
+printLatex2("tabela_dados_espera_injetados.tex");
 ##########################################################################
 
 
@@ -363,7 +424,8 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-printLatex("tabela_dados_administracao.tex");
+#printLatex("tabela_dados_administracao.tex");
+printLatex2("tabela_dados_administracao.tex");
 ##########################################################################
 
 
@@ -434,7 +496,8 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-printLatex("tabela_dados_laboratorio.tex");
+#tabela_dados_laboratorio.tex");
+printLatex2("tabela_dados_laboratorio.tex");
 ##########################################################################
 
 
@@ -449,8 +512,9 @@ printf("Suposicao de que 10%% de cada dose semanal é descartada e de que são\n
 printf("armazenadas em blindagens de 5 mm de espessura de chumbo.\n\n");
 
 
-AmCi = 0.1 .* [1000 50 15 20 10 100]; A = AmCi .* 37;
-A = A .* exp(-log(2) * 0.5 ./ csrPb);
+AmCi = 0.1 .* [1000 50 15 20 10 100] .* exp(-log(2) * 0.5 ./ csrPb);
+A = AmCi .* 37;
+#A = A .* exp(-log(2) * 0.5 ./ csrPb);
 
 N = [1 1 1 1 1 1];
 t = 40;
@@ -478,7 +542,8 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-printLatex("tabela_dados_rejeitos.tex");
+#printLatex("tabela_dados_rejeitos.tex");
+printLatex2("tabela_dados_rejeitos.tex");
 ##########################################################################
 
 
@@ -531,7 +596,8 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-printLatex("tabela_dados_ergometria.tex");
+#printLatex("tabela_dados_ergometria.tex");
+printLatex2("tabela_dados_ergometria.tex");
 ##########################################################################
 
 
@@ -571,7 +637,8 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-printLatex("tabela_dados_inalacao.tex");
+#printLatex("tabela_dados_inalacao.tex");
+printLatex2("tabela_dados_inalacao.tex");
 ##########################################################################
 
 
