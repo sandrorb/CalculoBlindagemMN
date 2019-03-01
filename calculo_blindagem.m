@@ -143,7 +143,7 @@ function calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite)
 	printf("Blindagem (cm de Pb, barita e concreto): %6.3f, %6.3f, %6.3f\n\n", x, y, z);
 	
 	aux = wfp;
-	#wfp = [wfp doseLimite sum(doseSemBlindagem) x y z];
+  # A orgem de exportação da tabela LaTeX não é a que consta abaixo
   wfp = [wfp doseLimite sum(doseSemBlindagem) x y z t tu T d];
  	dadosParaImpressao = vertcat(dadosParaImpressao, wfp);
  	wfp = aux;
@@ -154,7 +154,7 @@ endfunction
 ##########################################################################
 # Saida de dados para tabela LaTeX
 # Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
-function printLatex(fn)
+function printLatexAntigo(fn)
   global dadosParaImpressao;
   fid = fopen(fn, "w");
   fprintf(fid, "\\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
@@ -178,8 +178,9 @@ endfunction
 
 ##########################################################################
 # Saida de dados para tabela LaTeX
-# Estrutura do array dadosParaImpressao: [W F P limite dose Pb Barita Concreto]
-function printLatex2(fn)
+# Estrutura do array dadosParaImpressao:
+#       [W F P t tu T d limite dose Pb Barita Concreto]
+function printLatex(fn)
   global dadosParaImpressao;
   fid = fopen(fn, "w");
 
@@ -299,8 +300,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-#printLatex("tabela_dados_exame.tex");
-printLatex2("tabela_dados_exame.tex");
+printLatex("tabela_dados_exame.tex");
 ##########################################################################
 
 
@@ -339,8 +339,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-#printLatex("tabela_dados_sanitario.tex");
-printLatex2("tabela_dados_sanitario.tex");
+printLatex("tabela_dados_sanitario.tex");
 ##########################################################################
 
 
@@ -385,8 +384,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-#printLatex("tabela_dados_espera_injetados.tex");
-printLatex2("tabela_dados_espera_injetados.tex");
+printLatex("tabela_dados_espera_injetados.tex");
 ##########################################################################
 
 
@@ -424,8 +422,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-#printLatex("tabela_dados_administracao.tex");
-printLatex2("tabela_dados_administracao.tex");
+printLatex("tabela_dados_administracao.tex");
 ##########################################################################
 
 
@@ -496,8 +493,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-#tabela_dados_laboratorio.tex");
-printLatex2("tabela_dados_laboratorio.tex");
+printLatex("tabela_dados_laboratorio.tex");
 ##########################################################################
 
 
@@ -514,7 +510,6 @@ printf("armazenadas em blindagens de 5 mm de espessura de chumbo.\n\n");
 
 AmCi = 0.1 .* [1000 50 15 20 10 100] .* exp(-log(2) * 0.5 ./ csrPb);
 A = AmCi .* 37;
-#A = A .* exp(-log(2) * 0.5 ./ csrPb);
 
 N = [1 1 1 1 1 1];
 t = 40;
@@ -542,8 +537,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-#printLatex("tabela_dados_rejeitos.tex");
-printLatex2("tabela_dados_rejeitos.tex");
+printLatex("tabela_dados_rejeitos.tex");
 ##########################################################################
 
 
@@ -596,8 +590,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-#printLatex("tabela_dados_ergometria.tex");
-printLatex2("tabela_dados_ergometria.tex");
+printLatex("tabela_dados_ergometria.tex");
 ##########################################################################
 
 
@@ -637,8 +630,7 @@ calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
 
-#printLatex("tabela_dados_inalacao.tex");
-printLatex2("tabela_dados_inalacao.tex");
+printLatex("tabela_dados_inalacao.tex");
 ##########################################################################
 
 
