@@ -1,7 +1,8 @@
+###############################################################################
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualizacao: 27 de fevereiro de 2019 às 16h23min
+# Atualização: 03 de março de 2019 às 11h34min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -16,6 +17,8 @@
 # e pode ser retirado do ar a qualquer momento
 
 # source('calculo_blindagem.m');
+###############################################################################
+
 
 # Variáveis globais usadas para acumular dados para impressão
 # dentro de uma função. A variável wfp significa Wall Fonte Ponto
@@ -24,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 27 de fevereiro de 2019 às 16h23min\n\n");
+printf("Cálculos realizados em 03 de março de 2019 às 11h34min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -228,9 +231,9 @@ endfunction
 # outras partes do programa para atender aos requisitos de cada área do SMN.
 
 # Algumas distâncias existentes na planta em metros
-peDireitoSMN = 2.95;
-peDireitoAndarSuperior = 2.95;
-peDireitoAndarInferior = 2.95;
+peDireitoSMN = 3.00; #2.95
+peDireitoAndarSuperior = 3.00;
+peDireitoAndarInferior = 4.00;
 espessuraLaje = 0.09;
 
 # distância do paciente (1.5 m do chão) a 30 cm abaixo da laje inferior
