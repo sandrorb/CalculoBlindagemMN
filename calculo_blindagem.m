@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 03 de março de 2019 às 11h34min
+# Atualização: 03 de março de 2019 às 18h13min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 03 de março de 2019 às 11h34min\n\n");
+printf("Cálculos realizados em 03 de março de 2019 às 18h13min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -200,9 +200,20 @@ function printLatex(fn)
   fprintf(fid, "\\textbf{Barita} & \\textbf{Concreto} \\\\ \\hline \n");
   
   for i = 1:rows(dadosParaImpressao)
-	  fprintf(fid,    "%3d & ", dadosParaImpressao(i,1)); # w (parede)
-    fprintf(fid,    "%3d & ", dadosParaImpressao(i,2)); # f (fonte)
-	  fprintf(fid,    "%3d & ", dadosParaImpressao(i,3)); # p (ponto de interesse)
+    
+    if ( i >= (rows(dadosParaImpressao) - 1) )
+      if (i == (rows(dadosParaImpressao) - 1))
+        fprintf(fid, "\\multicolumn{3}{|c|}{Piso} & "); # w (parede)
+      else
+        if (i == rows(dadosParaImpressao))
+          fprintf(fid, "\\multicolumn{3}{|c|}{Teto} & "); # w (parede)
+        endif
+      endif
+    else
+      fprintf(fid,    "%3d & ", dadosParaImpressao(i,1)); # w (parede)  
+      fprintf(fid,    "%3d & ", dadosParaImpressao(i,2)); # f (fonte)
+	    fprintf(fid,    "%3d & ", dadosParaImpressao(i,3)); # p (ponto de interesse)
+    endif
     
     fprintf(fid, "%10.1f & ", dadosParaImpressao(i,9));  # t (tempo de permanência
     fprintf(fid, "%10.1f & ", dadosParaImpressao(i,10)); # tu (tempo de uptake
@@ -215,11 +226,16 @@ function printLatex(fn)
     fprintf(fid, "%10.3f & ", dadosParaImpressao(i,6)); # x espessura de Pb
 
 	  if (dadosParaImpressao(i,7) > 2.5)	
-      fprintf(fid, "\\red{%10.3f} & ", dadosParaImpressao(i,7));
+      fprintf(fid, "\\red{%10.3f} & ", dadosParaImpressao(i,7)); # y
     else
-      fprintf(fid, "%10.3f & ", dadosParaImpressao(i,7));
+      fprintf(fid, "%10.3f & ", dadosParaImpressao(i,7)); # y
     endif
-	  fprintf(fid, "%10.3f \\\\ \n", dadosParaImpressao(i,8));
+	  fprintf(fid, "%10.3f \\\\ \n", dadosParaImpressao(i,8)); # z espessura de Concreto
+    
+    if ( i == (rows(dadosParaImpressao) - 2) )
+      fprintf(fid, "\\hline \n");
+    endif
+    
   endfor
   fclose(fid);
 endfunction
@@ -234,13 +250,20 @@ endfunction
 peDireitoSMN = 3.00; #2.95
 peDireitoAndarSuperior = 3.00;
 peDireitoAndarInferior = 4.00;
-espessuraLaje = 0.09;
+espessuraLaje = 0.10; # cada uma
+espessuraLaje = espessuraLaje * 2; # são lajes duplas, mas com separação de 40cm
 
 # distância do paciente (1.5 m do chão) a 30 cm abaixo da laje inferior
 dPacAlvoAndarInferior = 1.5 + espessuraLaje + 0.3;
 
 # distância do paciente a 30 cm da superfície da laje superior
 dPacAlvoAndarSuperior = peDireitoSMN - 1.5 + espessuraLaje + 0.3;
+
+# distância do paciente (1.5 m do chão) a 30 cm abaixo da laje inferior
+dRejeitoAlvoAndarInferior = 0.5 + espessuraLaje + 0.3;
+
+# distância do paciente a 30 cm da superfície da laje superior
+dRejeitoAlvoAndarSuperior = peDireitoSMN - 0.5 + espessuraLaje + 0.3;
 
 fatorOcupAndarInf = 1;
 fatorOcupAndarSup = 1;
@@ -531,11 +554,13 @@ wfp = [4 1 4]; T = 1/8; d = mm2m(29.77); doseLimite = 100;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Piso
-wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+wfp = [5 1 5]; T = fatorOcupAndarInf;
+d = dRejeitoAlvoAndarInferior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+wfp = [6 1 6]; T = fatorOcupAndarSup;
+d = dRejeitoAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
