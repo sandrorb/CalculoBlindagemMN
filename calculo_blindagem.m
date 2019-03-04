@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 03 de março de 2019 às 23h38min
+# Atualização: 04 de março de 2019 às 00h53min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 03 de março de 2019 às 23h38min\n\n");
+printf("Cálculos realizados em 04 de março de 2019 às 00h53min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -684,9 +684,10 @@ function printMaior(f, a, b, x, y)
   
 #  fprintf(f, "%s & %.3f & %.3f \\\\ \n", a, x, max(x,y));
 #  fprintf(f, "%s & %.3f & \\\\ \\hline \n", b, y);
-
-  fprintf(f, "%s & %s & \\multirow{2}{*}{%.3f} \\\\ \n", a, b, max(x,y));
-  fprintf(f, "%.3f & %.3f &  \\\\ \\hline \n", x, y);
+  res = max(x,y);
+  resArredondado = idivide(fix(res * 100) + 49, 50, "fix") / 2;
+  fprintf(f, "%s & %s & \\multirow{2}{*}{%.3f} & \\multirow{2}{*}{%.1f} \\\\ \n", a, b, res, resArredondado);
+  fprintf(f, "%.3f & %.3f & & \\\\ \\hline \n", x, y);
 endfunction
 # Pb = 6.  barita = 7 e concreto = 8
 i = 7; # barita
@@ -712,6 +713,7 @@ fclose(fcomp);
 ###########################################################################
 
 
+#(idivide(floor(x * 100), 51, "floor") + 1) / 2
 
 
 #clear wfp dadosParaImpressao;
