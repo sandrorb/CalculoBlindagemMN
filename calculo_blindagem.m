@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 03 de março de 2019 às 19h05min
+# Atualização: 03 de março de 2019 às 23h38min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 03 de março de 2019 às 19h05min\n\n");
+printf("Cálculos realizados em 03 de março de 2019 às 23h38min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -328,7 +328,7 @@ printf("\n");
 
 printLatex("tabela_dados_exame.tex");
 ##########################################################################
-
+xExame = dadosParaImpressao;
 
 
 
@@ -367,6 +367,7 @@ printf("\n");
 
 printLatex("tabela_dados_sanitario.tex");
 ##########################################################################
+xSanitario = dadosParaImpressao;
 
 
 
@@ -412,6 +413,8 @@ printf("\n");
 
 printLatex("tabela_dados_espera_injetados.tex");
 ##########################################################################
+xEspera = dadosParaImpressao;
+
 
 
 wfp = [];
@@ -450,7 +453,7 @@ printf("\n");
 
 printLatex("tabela_dados_administracao.tex");
 ##########################################################################
-
+xAdm = dadosParaImpressao;
 
 
 wfp = [];
@@ -521,6 +524,7 @@ printf("\n");
 
 printLatex("tabela_dados_laboratorio.tex");
 ##########################################################################
+xLab = dadosParaImpressao;
 
 
 
@@ -567,6 +571,8 @@ printf("\n");
 
 printLatex("tabela_dados_rejeitos.tex");
 ##########################################################################
+xRejeito = dadosParaImpressao;
+
 
 
 
@@ -620,6 +626,9 @@ printf("\n");
 
 printLatex("tabela_dados_ergometria.tex");
 ##########################################################################
+xErgo = dadosParaImpressao;
+
+
 
 
 wfp = [];
@@ -660,6 +669,48 @@ printf("\n");
 
 printLatex("tabela_dados_inalacao.tex");
 ##########################################################################
+xInalacao = dadosParaImpressao;
+
+
+
+
+###########################################################################
+###########################################################################
+function printMaior(f, a, b, x, y)
+  printf("%s: %.3f e %s: %.3f\n", a, x, b, y);
+  printf("A maior espessura é: %.3f\n\n", max(x,y));
+  
+  #fprintf(f, "%s & %.3f & %s & %.3f \\\\ \n", a, x, b, y);
+  
+#  fprintf(f, "%s & %.3f & %.3f \\\\ \n", a, x, max(x,y));
+#  fprintf(f, "%s & %.3f & \\\\ \\hline \n", b, y);
+
+  fprintf(f, "%s & %s & \\multirow{2}{*}{%.3f} \\\\ \n", a, b, max(x,y));
+  fprintf(f, "%.3f & %.3f &  \\\\ \\hline \n", x, y);
+endfunction
+# Pb = 6.  barita = 7 e concreto = 8
+i = 7; # barita
+fcomp = fopen("resultadosComparacoes.tex", "w");
+
+printf("Comparações dos resultados dos cálculos de duas vias:\n");
+
+printMaior(fcomp, "Sala Exame", "Espera Injetados", xExame(1,i), xEspera(5,i));
+printMaior(fcomp, "Sala Exame", "Inalação", xExame(2,i), xInalacao(4,i));
+printMaior(fcomp, "Sala Exame", "Sanitário", xExame(6,i), xSanitario(3,i));
+
+printMaior(fcomp, "Sala Espera", "Sanitário", xEspera(5,i), xSanitario(2,i));
+printMaior(fcomp, "Sala Espera", "Administração", xEspera(2,i), xAdm(4,i));
+printMaior(fcomp, "Sala Espera", "Inalação", xEspera(4,i), xInalacao(1,i));
+
+printMaior(fcomp, "Administração", "Laboratório", xAdm(2,i), xLab(7,i));
+
+printMaior(fcomp, "Laboratório", "Rejeito", xLab(2,i), xRejeito(4,i));
+printMaior(fcomp, "Laboratório", "Ergometria", xLab(5,i), xErgo(1,i));
+
+fclose(fcomp);
+###########################################################################
+###########################################################################
+
 
 
 
