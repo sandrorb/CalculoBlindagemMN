@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 04 de março de 2019 às 00h53min
+# Atualização: 04 de março de 2019 às 20h48min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 04 de março de 2019 às 00h53min\n\n");
+printf("Cálculos realizados em 04 de março de 2019 às 20h48min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -215,9 +215,9 @@ function printLatex(fn)
 	    fprintf(fid,    "%3d & ", dadosParaImpressao(i,3)); # p (ponto de interesse)
     endif
     
-    fprintf(fid, "%10.1f & ", dadosParaImpressao(i,9));  # t (tempo de permanência
-    fprintf(fid, "%10.1f & ", dadosParaImpressao(i,10)); # tu (tempo de uptake
-    fprintf(fid, "%10.2f & ", dadosParaImpressao(i,11)); # T (fator de ocupação)
+    fprintf(fid, "%10.3f & ", dadosParaImpressao(i,9));  # t (tempo de permanência
+    fprintf(fid, "%10.3f & ", dadosParaImpressao(i,10)); # tu (tempo de uptake
+    fprintf(fid, "%10.3f & ", dadosParaImpressao(i,11)); # T (fator de ocupação)
     fprintf(fid, "%10.3f & ", dadosParaImpressao(i,12)); # d (distância e m)
     
     fprintf(fid, "%10.2f & ", dadosParaImpressao(i,4)); # dose limite
