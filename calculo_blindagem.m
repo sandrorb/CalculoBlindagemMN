@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 04 de março de 2019 às 20h48min
+# Atualização: 06 de março de 2019 às 15h39min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 04 de março de 2019 às 20h48min\n\n");
+printf("Cálculos realizados em 06 de março de 2019 às 15h39min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -252,18 +252,19 @@ peDireitoAndarSuperior = 3.00;
 peDireitoAndarInferior = 4.00;
 espessuraLaje = 0.10; # cada uma
 espessuraLaje = espessuraLaje * 2; # são lajes duplas, mas com separação de 40cm
+dEntreLajesDuplas = 0.40;
 
 # distância do paciente (1.5 m do chão) a 30 cm abaixo da laje inferior
-dPacAlvoAndarInferior = 1.5 + espessuraLaje + 0.3;
+dPacAlvoAndarInferior = 1.5 + espessuraLaje + dEntreLajesDuplas + 0.3;
 
 # distância do paciente a 30 cm da superfície da laje superior
-dPacAlvoAndarSuperior = peDireitoSMN - 1.5 + espessuraLaje + 0.3;
+dPacAlvoAndarSuperior = peDireitoSMN - 1.5 + espessuraLaje + dEntreLajesDuplas + 0.3;
 
 # distância do paciente (1.5 m do chão) a 30 cm abaixo da laje inferior
-dRejeitoAlvoAndarInferior = 0.5 + espessuraLaje + 0.3;
+dRejeitoAlvoAndarInferior = 0.5 + espessuraLaje + dEntreLajesDuplas + 0.3;
 
 # distância do paciente a 30 cm da superfície da laje superior
-dRejeitoAlvoAndarSuperior = peDireitoSMN - 0.5 + espessuraLaje + 0.3;
+dRejeitoAlvoAndarSuperior = peDireitoSMN - 0.5 + espessuraLaje + dEntreLajesDuplas + 0.3;
 
 fatorOcupAndarInf = 1;
 fatorOcupAndarSup = 1;
