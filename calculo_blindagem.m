@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 06 de março de 2019 às 15h39min
+# Atualização: 08 de março de 2019 às 09h36min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 06 de março de 2019 às 15h39min\n\n");
+printf("Cálculos realizados em 08 de março de 2019 às 09h36min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -190,8 +190,8 @@ function printLatex(fn)
 # Preparação da primeira linha do cobeçalho
   fprintf(fid, "\\\\ \\cline{8-12}\n");
   fprintf(fid, "\\multicolumn{7}{c|}{} & \n");
-  fprintf(fid, "\\multicolumn{2}{c|}{\\textbf{Doses em $\\mu$Sv}}  & \n"); 
-  fprintf(fid, "\\multicolumn{3}{c|}{\\textbf{Espessuras em cm}} \\\\ \\hline \n");
+  fprintf(fid, "\\multicolumn{2}{c|}{\\textbf{Doses ($\\mu$Sv)}}  & \n"); 
+  fprintf(fid, "\\multicolumn{3}{c|}{\\textbf{Espessuras (cm)}} \\\\ \\hline \n");
 
 # Preparação da segunda linha do cabeçalho
   fprintf(fid, "\\textbf{W} & \\textbf{F} &  \\textbf{P} & ");
@@ -268,6 +268,7 @@ dRejeitoAlvoAndarSuperior = peDireitoSMN - 0.5 + espessuraLaje + dEntreLajesDupl
 
 fatorOcupAndarInf = 1;
 fatorOcupAndarSup = 1;
+fatorOcupAndarSupEspecial = 1/40;
 ##########################################################################
 
 
@@ -361,7 +362,7 @@ wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [6 1 5]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+wfp = [6 1 5]; T = fatorOcupAndarSupEspecial; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
@@ -407,7 +408,7 @@ wfp = [7 1 7]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [8 1 8]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+wfp = [8 1 8]; T = fatorOcupAndarSupEspecial; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
@@ -447,7 +448,7 @@ wfp = [5 1 5]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [6 1 6]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+wfp = [6 1 6]; T = fatorOcupAndarSupEspecial; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
@@ -518,7 +519,7 @@ wfp = [8 1 8]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [8 1 9]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+wfp = [8 1 9]; T = fatorOcupAndarSupEspecial; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
@@ -564,7 +565,7 @@ d = dRejeitoAlvoAndarInferior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [6 1 6]; T = fatorOcupAndarSup;
+wfp = [6 1 6]; T = fatorOcupAndarSupEspecial;
 d = dRejeitoAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
