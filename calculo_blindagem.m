@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 08 de março de 2019 às 09h36min
+# Atualização: 11 de março de 2019 às 15h59min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 08 de março de 2019 às 09h36min\n\n");
+printf("Cálculos realizados em 11 de março de 2019 às 15h59min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -519,7 +519,9 @@ wfp = [8 1 8]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 # Teto
-wfp = [8 1 9]; T = fatorOcupAndarSupEspecial; d = dPacAlvoAndarSuperior; doseLimite = 20;
+# O Teto do Laboratório é parcialmente telhado e uma pequena parte é laje
+# Será feito o cálculo como se tudo fosse laje, mas a parte de telhado não terá blindagem
+wfp = [8 1 9]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 printf("\n");
