@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 11 de março de 2019 às 15h59min
+# Atualização: 11 de março de 2019 às 17h52min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 11 de março de 2019 às 15h59min\n\n");
+printf("Cálculos realizados em 11 de março de 2019 às 17h52min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -268,7 +268,7 @@ dRejeitoAlvoAndarSuperior = peDireitoSMN - 0.5 + espessuraLaje + dEntreLajesDupl
 
 fatorOcupAndarInf = 1;
 fatorOcupAndarSup = 1;
-fatorOcupAndarSupEspecial = 1/40;
+fatorOcupAndarSupEspecial = 0; #1/40;
 ##########################################################################
 
 
