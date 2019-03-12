@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 11 de março de 2019 às 17h52min
+# Atualização: 12 de março de 2019 às 08h55min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 11 de março de 2019 às 17h52min\n\n");
+printf("Cálculos realizados em 12 de março de 2019 às 08h55min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -269,6 +269,7 @@ dRejeitoAlvoAndarSuperior = peDireitoSMN - 0.5 + espessuraLaje + dEntreLajesDupl
 fatorOcupAndarInf = 1;
 fatorOcupAndarSup = 1;
 fatorOcupAndarSupEspecial = 0; #1/40;
+fatorOcupVaoLivreRua = 0;
 ##########################################################################
 
 
@@ -345,7 +346,8 @@ N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 5 / 60;
 tu = 0;
 
-wfp = [1 1 1]; T = 1/40; d = mm2m(33.71); doseLimite = 20;
+# Vão livre voltado pra rua à uns 4 m acima da calçada.
+wfp = [1 1 1]; T = fatorOcupVaoLivreRua; d = mm2m(33.71); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 wfp = [2 1 2]; T = 1/5; d = mm2m(24.71); doseLimite = 20;
@@ -385,7 +387,8 @@ N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 90 / 60;
 tu = 0;
 
-wfp = [1 1 1]; T = 1/40; d = mm2m(36.25); doseLimite = 20;
+# Vão livre voltado pra rua à uns 4 m acima da calçada.
+wfp = [1 1 1]; T = fatorOcupVaoLivreRua; d = mm2m(36.25); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 wfp = [2 1 2]; T = 1; d = mm2m(62.50); doseLimite = 100;
@@ -431,7 +434,8 @@ N = [NumeroPacientesTc99m 10 5 4 2 1];
 t = 10 / 60;
 tu = 0.0;
 
-wfp = [1 1 1]; T = 1/40; d = mm2m(37.32); doseLimite = 20;
+# Vão livre voltado pra rua à uns 4 m acima da calçada.
+wfp = [1 1 1]; T = fatorOcupVaoLivreRua; d = mm2m(37.32); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 wfp = [2 1 2]; T = 1; d = mm2m(38.79); doseLimite = 100;
@@ -477,7 +481,8 @@ t = 10/60;
 tu = 0.0;
 #----------------------------------------------------------------
 
-wfp = [1 1 1]; T = 1/40; d = mm2m(35.68); doseLimite = 20;
+# Vão livre voltado pra rua à uns 4 m acima da calçada.
+wfp = [1 1 1]; T = fatorOcupVaoLivreRua; d = mm2m(35.68); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 wfp = [2 1 2]; T = 1/20; d = mm2m(34.06); doseLimite = 100;
@@ -549,7 +554,8 @@ N = [1 1 1 1 1 1];
 t = 40;
 tu = 0.0;
 
-wfp = [1 1 1]; T = 1/40; d = mm2m(34.64); doseLimite = 20;
+# Vão livre voltado pra rua à uns 4 m acima da calçada.
+wfp = [1 1 1]; T = fatorOcupVaoLivreRua; d = mm2m(34.64); doseLimite = 20;
 calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
 
 wfp = [2 1 2]; T = 1/20; d = mm2m(25.64); doseLimite = 20;
