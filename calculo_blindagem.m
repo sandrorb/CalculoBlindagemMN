@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 12 de março de 2019 às 08h55min
+# Atualização: 12 de março de 2019 às 09h56min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 12 de março de 2019 às 08h55min\n\n");
+printf("Cálculos realizados em 12 de março de 2019 às 09h56min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -681,6 +681,37 @@ printLatex("tabela_dados_inalacao.tex");
 ##########################################################################
 xInalacao = dadosParaImpressao;
 
+
+
+wfp = [];
+dadosParaImpressao = [];
+
+##########################################################################
+printf("Corredor Interno:\n\n");
+
+AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
+N = [NumeroPacientesTc99m 10 5 4 2 1];
+t = 1 / 60;
+tu = 0;
+
+wfp = [1 1 1]; T = 1; d = mm2m(56.22); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+wfp = [2 1 2]; T = 1/5; d = mm2m(56.22); doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Piso
+wfp = [3 1 3]; T = fatorOcupAndarInf; d = dPacAlvoAndarInferior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+# Teto
+wfp = [4 1 4]; T = fatorOcupAndarSup; d = dPacAlvoAndarSuperior; doseLimite = 20;
+calculoParede(G, A, N, t, tu, T, d, Tf, mu, doseLimite);
+
+printf("\n");
+
+printLatex("tabela_dados_corredor.tex");
+##########################################################################
 
 
 
