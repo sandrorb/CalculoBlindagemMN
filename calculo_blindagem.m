@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 12 de março de 2019 às 21h19min
+# Atualização: 12 de março de 2019 às 21h46min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 12 de março de 2019 às 21h19min\n\n");
+printf("Cálculos realizados em 12 de março de 2019 às 21h46min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -736,7 +736,8 @@ fcomp = fopen("resultadosComparacoes.tex", "w");
 
 printf("Comparações dos resultados dos cálculos de duas vias:\n");
 
-printMaior(fcomp, "Sala Exame", "Espera Injetados", xExame(1,i), xEspera(5,i));
+
+#printMaior(fcomp, "Sala Exame", "Espera Injetados", xExame(1,i), xEspera(5,i));
 printMaior(fcomp, "Sala Exame", "Inalação", xExame(2,i), xInalacao(4,i));
 printMaior(fcomp, "Sala Exame", "Sanitário", xExame(6,i), xSanitario(3,i));
 
