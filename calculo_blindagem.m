@@ -2,7 +2,7 @@
 #       Autor: Sandro Roger Boschetti
 #     Contato: linkedin.com/in/sandroboschetti
 #        Data: 22 de novembro de 2016 às 11h09min
-# Atualização: 12 de março de 2019 às 21h46min
+# Atualização: 28 de março de 2019 às 15h58min
 
 # Programa implementado para a realização de cálculos de blindagem
 # em medicina nuclear.
@@ -27,7 +27,7 @@ global dadosParaImpressao;
 
 clc;
 
-printf("Cálculos realizados em 12 de março de 2019 às 21h46min\n\n");
+printf("Cálculos realizados em 28 de março de 2019 às 15h58min\n\n");
 
 ########################### Definicoes : Inicio ###########################
 sigla = cellstr(['Tc-99m'; 'I-131'; 'I-123'; 'Ga-67'; 'Tl-201'; 'Sm-153']);
@@ -343,7 +343,7 @@ printf("Sanitário Exclusivo de Pacientes Injetados:\n\n");
 
 AmCi = [30 5 5 5 10 50]; A = AmCi .* 37;
 N = [NumeroPacientesTc99m 10 5 4 2 1];
-t = 5 / 60;
+t = 3 / 60;
 tu = 0;
 
 # Vão livre voltado pra rua à uns 4 m acima da calçada.
@@ -736,12 +736,12 @@ fcomp = fopen("resultadosComparacoes.tex", "w");
 
 printf("Comparações dos resultados dos cálculos de duas vias:\n");
 
-
+# Exame/Espera foi tirado pois o cálculo foi feito em separado em planilha
 #printMaior(fcomp, "Sala Exame", "Espera Injetados", xExame(1,i), xEspera(5,i));
 printMaior(fcomp, "Sala Exame", "Inalação", xExame(2,i), xInalacao(4,i));
 printMaior(fcomp, "Sala Exame", "Sanitário", xExame(6,i), xSanitario(3,i));
 
-printMaior(fcomp, "Sala Espera", "Sanitário", xEspera(5,i), xSanitario(2,i));
+printMaior(fcomp, "Sala Espera", "Sanitário", xEspera(6,i), xSanitario(2,i));
 printMaior(fcomp, "Sala Espera", "Administração", xEspera(2,i), xAdm(4,i));
 printMaior(fcomp, "Sala Espera", "Inalação", xEspera(4,i), xInalacao(1,i));
 
